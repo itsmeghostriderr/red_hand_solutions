@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Header from '../../components/ui/Header';
+import Footer from '../../components/ui/Footer';
 import HeroSection from './components/HeroSection';
 import TimelineSection from './components/TimelineSection';
 import MissionValuesSection from './components/MissionValuesSection';
@@ -14,7 +15,7 @@ const AboutUs = () => {
   return (
     <>
       <Helmet>
-        <title>Red Hand Solutions | Gujarat's Leading IT Solutions Provider</title>
+        <title>About Us | Red Hand Solutions - Gujarat's Premier IT Partner</title>
         <meta 
           name="description" 
           content="Learn about Red Hand Solutions' journey from a Rajkot startup to Gujarat's trusted IT partner. Discover our mission, values, expert team, and commitment to transforming businesses through innovative technology solutions." 
@@ -26,32 +27,36 @@ const AboutUs = () => {
         <link rel="canonical" href="/about-us" />
       </Helmet>
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-transparent text-slate-900 dark:text-white transition-colors duration-300">
         <Header />
         
-        {/* Hero Section */}
-        <HeroSection />
-        
-        {/* Interactive Timeline */}
-        <TimelineSection />
-        
-        {/* Mission & Values */}
-        <MissionValuesSection />
-        
-        {/* Team Showcase */}
-        <TeamSection />
-        
-        {/* Gujarat Focus */}
-        <GujaratFocusSection />
-        
-        {/* Company Culture */}
-        <CompanyCultureSection />
-        
-        {/* Trust Indicators */}
-        <TrustIndicatorsSection />
-        
-        {/* Growth Metrics */}
-        <GrowthMetricsSection />
+        <main className="relative z-10">
+          {/* Hero Section */}
+          <HeroSection />
+          
+          {/* Interactive Timeline */}
+          <TimelineSection />
+          
+          {/* Mission & Values */}
+          <MissionValuesSection />
+          
+          {/* Team Showcase */}
+          <TeamSection />
+          
+          {/* Gujarat Focus */}
+          <GujaratFocusSection />
+          
+          {/* Company Culture */}
+          <CompanyCultureSection />
+          
+          {/* Trust Indicators */}
+          <TrustIndicatorsSection />
+          
+          {/* Growth Metrics */}
+          <GrowthMetricsSection />
+        </main>
+
+        <Footer />
       </div>
     </>
   );

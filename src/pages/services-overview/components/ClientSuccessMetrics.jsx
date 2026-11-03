@@ -1,9 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import Icon from '../../../components/AppIcon';
+import { motion } from 'framer-motion';
+import { 
+  CheckCircle, 
+  Users, 
+  TrendingUp, 
+  Star, 
+  Globe, 
+  Smartphone, 
+  Cloud, 
+  Award, 
+  ShieldCheck, 
+  Zap, 
+  Sparkles,
+  ArrowUpRight 
+} from 'lucide-react';
+
+const iconMap = {
+  Globe,
+  Smartphone,
+  Cloud,
+  TrendingUp,
+  Users,
+  Award,
+  ShieldCheck,
+  Zap,
+  Star,
+  CheckCircle
+};
 
 const ClientSuccessMetrics = () => {
-  const [animatedValues, setAnimatedValues] = useState({});
-  const [isVisible, setIsVisible] = useState(false);
+  const [animatedValues, setAnimatedValues] = useState({
+    projects: 150,
+    clients: 120,
+    revenue: 250,
+    satisfaction: 98
+  });
 
   const metrics = [
     {
@@ -12,7 +43,6 @@ const ClientSuccessMetrics = () => {
       value: 150,
       suffix: '+',
       icon: 'CheckCircle',
-      color: 'success',
       description: 'Successfully delivered projects across Gujarat'
     },
     {
@@ -21,7 +51,6 @@ const ClientSuccessMetrics = () => {
       value: 120,
       suffix: '+',
       icon: 'Users',
-      color: 'accent',
       description: 'Businesses transformed with our solutions'
     },
     {
@@ -30,7 +59,6 @@ const ClientSuccessMetrics = () => {
       value: 250,
       suffix: '%',
       icon: 'TrendingUp',
-      color: 'secondary',
       description: 'Average revenue growth for our clients'
     },
     {
@@ -39,7 +67,6 @@ const ClientSuccessMetrics = () => {
       value: 98,
       suffix: '%',
       icon: 'Star',
-      color: 'warning',
       description: 'Client satisfaction rate based on feedback'
     }
   ];
@@ -75,157 +102,147 @@ const ClientSuccessMetrics = () => {
     }
   ];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    const element = document.getElementById('metrics-section');
-    if (element) observer?.observe(element);
-
-    return () => observer?.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (isVisible) {
-      metrics?.forEach((metric) => {
-        let start = 0;
-        const end = metric?.value;
-        const duration = 2000;
-        const increment = end / (duration / 16);
-
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= end) {
-            setAnimatedValues(prev => ({ ...prev, [metric?.id]: end }));
-            clearInterval(timer);
-          } else {
-            setAnimatedValues(prev => ({ ...prev, [metric?.id]: Math.floor(start) }));
-          }
-        }, 16);
-      });
+  const recognitions = [
+    {
+      title: "Best IT Solutions",
+      organization: "Gujarat Tech Awards 2023",
+      icon: Award
+    },
+    {
+      title: "ISO Certified",
+      organization: "Quality Management",
+      icon: ShieldCheck
+    },
+    {
+      title: "Top Employer",
+      organization: "Rajkot IT Sector 2023",
+      icon: Users
+    },
+    {
+      title: "Innovation Leader",
+      organization: "Digital Gujarat Summit",
+      icon: Zap
     }
-  }, [isVisible]);
-
-  const getColorClasses = (color) => {
-    const colorMap = {
-      success: 'text-success bg-success/10 border-success/20',
-      accent: 'text-accent bg-accent/10 border-accent/20',
-      secondary: 'text-secondary bg-secondary/10 border-secondary/20',
-      warning: 'text-warning bg-warning/10 border-warning/20'
-    };
-    return colorMap?.[color] || colorMap?.accent;
-  };
+  ];
 
   return (
-    <div id="metrics-section" className="space-y-8">
-      {/* Main Metrics */}
-      <div className="bg-card border border-border rounded-xl p-8">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-foreground mb-2">Our Track Record</h3>
-          <p className="text-muted-foreground">Proven results that speak for themselves</p>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {metrics?.map((metric) => (
-            <div key={metric?.id} className="text-center">
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border-2 ${getColorClasses(metric?.color)}`}>
-                <Icon name={metric?.icon} size={28} />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-foreground">
-                  {animatedValues?.[metric?.id] || 0}{metric?.suffix}
-                </div>
-                <h4 className="font-semibold text-foreground">{metric?.title}</h4>
-                <p className="text-sm text-muted-foreground">{metric?.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* Success Stories */}
-      <div className="bg-card border border-border rounded-xl p-8">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-foreground mb-2">Client Success Stories</h3>
-          <p className="text-muted-foreground">Real results from real businesses in Gujarat</p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {successStories?.map((story, index) => (
-            <div 
-              key={index}
-              className="p-6 bg-muted/30 border border-border rounded-lg hover:shadow-brand transition-all duration-300"
+    <div id="metrics-section" className="space-y-12">
+      {/* 4 Animated KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {metrics.map((metric, idx) => {
+          const IconComp = iconMap[metric.icon] || CheckCircle;
+          return (
+            <motion.div
+              key={metric.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="p-6 sm:p-7 rounded-2xl glass-card border border-gray-200 dark:border-white/10 hover:border-red-500/40 text-center transition-all group"
             >
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-secondary to-accent rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Icon name={story?.icon} size={24} color="white" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500/10 to-red-600/20 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all duration-300">
+                <IconComp className="w-6 h-6" />
+              </div>
+
+              <div className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-1">
+                {animatedValues[metric.id]}
+                <span className="text-red-600 dark:text-red-400">{metric.suffix}</span>
+              </div>
+              <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1.5">
+                {metric.title}
+              </h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                {metric.description}
+              </p>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Client Success Stories */}
+      <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 shadow-2xl">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-4 h-4" /> Proven Regional Impact
+          </div>
+          <h3 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            Client <span className="text-red-600 dark:text-red-500">Success Stories</span>
+          </h3>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+            Real enterprise transformation delivered to thriving Gujarat businesses.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 text-left">
+          {successStories.map((story, index) => {
+            const StoryIcon = iconMap[story.icon] || Globe;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="p-6 rounded-2xl bg-white/70 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/10 hover:border-red-500/40 transition-all flex items-start gap-4"
+              >
+                <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 border border-red-500/20">
+                  <StoryIcon className="w-6 h-6" />
                 </div>
-                
+
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-foreground">{story?.client}</h4>
-                    <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                      {story?.timeframe}
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="font-bold text-gray-900 dark:text-white text-base">
+                      {story.client}
+                    </h4>
+                    <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-300">
+                      {story.timeframe}
                     </span>
                   </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-2">{story?.service}</p>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Icon name="TrendingUp" size={16} color="var(--color-success)" />
-                    <span className="text-sm font-medium text-success">{story?.improvement}</span>
+                  <p className="text-xs text-red-600 dark:text-red-400 font-medium mb-3">
+                    {story.service}
+                  </p>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>{story.improvement}</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-      {/* Industry Recognition */}
-      <div className="bg-gradient-to-br from-secondary/5 to-accent/5 border border-border rounded-xl p-8">
+
+      {/* Industry Recognition Badges */}
+      <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-10 shadow-2xl">
         <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-foreground mb-2">Industry Recognition</h3>
-          <p className="text-muted-foreground">Trusted by businesses across Gujarat</p>
+          <h4 className="text-xl font-bold text-gray-900 dark:text-white">
+            Industry Recognition & Accreditations
+          </h4>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Trusted by businesses across Gujarat and recognized by technology bodies
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mx-auto mb-3">
-              <Icon name="Award" size={24} color="var(--color-secondary)" />
-            </div>
-            <h4 className="font-semibold text-foreground mb-1">Best IT Solutions</h4>
-            <p className="text-sm text-muted-foreground">Gujarat Tech Awards 2023</p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mx-auto mb-3">
-              <Icon name="Shield" size={24} color="var(--color-accent)" />
-            </div>
-            <h4 className="font-semibold text-foreground mb-1">ISO Certified</h4>
-            <p className="text-sm text-muted-foreground">Quality Management</p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mx-auto mb-3">
-              <Icon name="Users" size={24} color="var(--color-success)" />
-            </div>
-            <h4 className="font-semibold text-foreground mb-1">Top Employer</h4>
-            <p className="text-sm text-muted-foreground">Rajkot IT Sector 2023</p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mx-auto mb-3">
-              <Icon name="Zap" size={24} color="var(--color-warning)" />
-            </div>
-            <h4 className="font-semibold text-foreground mb-1">Innovation Leader</h4>
-            <p className="text-sm text-muted-foreground">Digital Gujarat Summit</p>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {recognitions.map((item, i) => {
+            const ItemIcon = item.icon;
+            return (
+              <div
+                key={i}
+                className="p-5 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5 flex flex-col items-center justify-center group hover:border-red-500/30 transition-all"
+              >
+                <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <ItemIcon className="w-6 h-6" />
+                </div>
+                <h5 className="font-bold text-sm text-gray-900 dark:text-white mb-1">
+                  {item.title}
+                </h5>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {item.organization}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

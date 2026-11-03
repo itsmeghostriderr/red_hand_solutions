@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 
@@ -54,124 +55,159 @@ const ClientTestimonials = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials?.length);
-    }, 5000);
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 6000);
 
     return () => clearInterval(interval);
-  }, [testimonials?.length]);
+  }, [testimonials.length]);
 
   const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials?.length);
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials?.length) % testimonials?.length);
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
-  const currentClient = testimonials?.[currentTestimonial];
+  const currentClient = testimonials[currentTestimonial];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            What Our <span className="text-red-600">Clients Say</span>
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-red-600/10 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-3">
+            <span>Client Proof & Verified Outcomes</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-5 tracking-tight">
+            What Our <span className="text-red-600 dark:text-red-500">Clients Say</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Real stories from Gujarat businesses that transformed with our solutions
           </p>
         </div>
 
-        {/* Main Testimonial */}
-        <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 lg:p-12 shadow-brand">
-          {/* Quote Icon */}
-          <div className="absolute top-8 left-8 w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
-            <Icon name="Quote" size={24} color="white" />
+        {/* Main Testimonial Card */}
+        <div className="relative max-w-5xl mx-auto rounded-3xl bg-white dark:bg-white/[0.04] backdrop-blur-2xl border border-gray-200/80 dark:border-white/10 p-8 sm:p-12 shadow-2xl shadow-red-950/10">
+          {/* Quote Icon Badge */}
+          <div className="absolute -top-6 left-8 sm:left-12 w-12 h-12 rounded-2xl bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-red-600/30">
+            <Icon name="Quote" size={22} />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-            {/* Client Info */}
-            <div className="text-center lg:text-left">
-              <div className="relative inline-block mb-6">
-                <Image
-                  src={currentClient?.image}
-                  alt={currentClient?.name}
-                  className="w-24 h-24 rounded-full object-cover mx-auto lg:mx-0"
-                />
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <Icon name="Check" size={16} color="white" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentClient.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-3"
+            >
+              {/* Client Info Column */}
+              <div className="lg:col-span-5 text-center lg:text-left border-b lg:border-b-0 lg:border-r border-gray-100 dark:border-white/10 pb-8 lg:pb-0 lg:pr-8">
+                <div className="relative inline-block mb-4">
+                  <Image
+                    src={currentClient.image}
+                    alt={currentClient.name}
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mx-auto lg:mx-0 border-2 border-red-500/30 shadow-md"
+                  />
+                  <div className="absolute -bottom-2 -right-2 w-7 h-7 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-sm">
+                    <Icon name="Check" size={14} />
+                  </div>
                 </div>
-              </div>
-              
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{currentClient?.name}</h3>
-              <p className="text-red-600 font-semibold mb-1">{currentClient?.company}</p>
-              <p className="text-gray-500 text-sm mb-4">{currentClient?.location}</p>
-              
-              {/* Rating */}
-              <div className="flex justify-center lg:justify-start mb-4">
-                {[...Array(currentClient?.rating)]?.map((_, i) => (
-                  <Icon key={i} name="Star" size={20} className="text-yellow-400 fill-current" />
-                ))}
-              </div>
 
-              {/* Project Details */}
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <p className="text-sm text-gray-600 mb-1">Project:</p>
-                <p className="font-semibold text-gray-900 mb-2">{currentClient?.project}</p>
-                <p className="text-sm text-gray-600 mb-1">Result:</p>
-                <p className="font-semibold text-green-600">{currentClient?.result}</p>
-              </div>
-            </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {currentClient.name}
+                </h3>
+                <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+                  {currentClient.company}
+                </p>
+                <div className="flex items-center justify-center lg:justify-start space-x-1 text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">
+                  <Icon name="MapPin" size={12} className="text-red-500" />
+                  <span>{currentClient.location}, Gujarat</span>
+                </div>
 
-            {/* Testimonial Content */}
-            <div className="lg:col-span-2">
-              <blockquote className="text-xl lg:text-2xl text-gray-700 leading-relaxed mb-8 italic">
-                "{currentClient?.testimonial}"
-              </blockquote>
-
-              {/* Navigation */}
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-2">
-                  {testimonials?.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentTestimonial(index)}
-                      className={`w-3 h-3 rounded-full transition-brand ${
-                        index === currentTestimonial ? 'bg-red-600' : 'bg-gray-300'
-                      }`}
-                    />
+                {/* Rating */}
+                <div className="flex justify-center lg:justify-start space-x-1 mb-5">
+                  {[...Array(currentClient.rating)].map((_, i) => (
+                    <Icon key={i} name="Star" size={16} className="text-amber-400 fill-amber-400" />
                   ))}
                 </div>
 
-                <div className="flex space-x-2">
-                  <button
-                    onClick={prevTestimonial}
-                    className="w-10 h-10 bg-white rounded-full shadow-brand flex items-center justify-center hover:bg-red-50 transition-brand"
-                  >
-                    <Icon name="ChevronLeft" size={20} className="text-red-600" />
-                  </button>
-                  <button
-                    onClick={nextTestimonial}
-                    className="w-10 h-10 bg-white rounded-full shadow-brand flex items-center justify-center hover:bg-red-50 transition-brand"
-                  >
-                    <Icon name="ChevronRight" size={20} className="text-red-600" />
-                  </button>
+                {/* Project Spec Box */}
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 space-y-1.5 text-xs text-left">
+                  <div className="flex justify-between items-center text-gray-500 dark:text-gray-400">
+                    <span>Project:</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">{currentClient.project}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200/50 dark:border-white/5">
+                    <span>Impact:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{currentClient.result}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+
+              {/* Quote Column */}
+              <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
+                <blockquote className="text-lg sm:text-xl lg:text-2xl text-gray-800 dark:text-gray-200 leading-relaxed italic font-medium">
+                  "{currentClient.testimonial}"
+                </blockquote>
+
+                {/* Navigation Controls */}
+                <div className="flex items-center justify-between pt-4">
+                  {/* Dots */}
+                  <div className="flex space-x-2">
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentTestimonial(index)}
+                        aria-label={`Go to testimonial ${index + 1}`}
+                        className={`h-2.5 rounded-full transition-all duration-300 ${
+                          index === currentTestimonial
+                            ? 'w-8 bg-red-600'
+                            : 'w-2.5 bg-gray-300 dark:bg-white/20 hover:bg-gray-400'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Arrow Buttons */}
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={prevTestimonial}
+                      aria-label="Previous testimonial"
+                      className="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:text-red-600 hover:border-red-500 flex items-center justify-center transition-all duration-200 active:scale-95"
+                    >
+                      <Icon name="ChevronLeft" size={18} />
+                    </button>
+                    <button
+                      onClick={nextTestimonial}
+                      aria-label="Next testimonial"
+                      className="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:text-red-600 hover:border-red-500 flex items-center justify-center transition-all duration-200 active:scale-95"
+                    >
+                      <Icon name="ChevronRight" size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* Client Logos */}
+        {/* Client Logos Strip */}
         <div className="mt-16">
-          <p className="text-center text-gray-500 mb-8">Trusted by leading businesses across Gujarat</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
-            {testimonials?.map((client, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-gray-100 rounded-lg p-4 h-16 flex items-center justify-center">
-                  <span className="font-bold text-gray-600 text-sm">{client?.company}</span>
-                </div>
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-6">
+            Trusted by leading businesses across Gujarat
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {testimonials.map((client, index) => (
+              <div
+                key={index}
+                className="py-4 px-6 rounded-2xl bg-white/60 dark:bg-white/[0.02] border border-gray-200/70 dark:border-white/5 flex items-center justify-center hover:border-red-500/30 transition-colors"
+              >
+                <span className="font-bold text-sm text-gray-700 dark:text-gray-300 tracking-wide">
+                  {client.company}
+                </span>
               </div>
             ))}
           </div>

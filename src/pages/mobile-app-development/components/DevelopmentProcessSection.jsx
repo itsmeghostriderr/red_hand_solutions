@@ -1,9 +1,35 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Lightbulb, 
+  Palette, 
+  Code, 
+  Shield, 
+  Rocket, 
+  Settings, 
+  ChevronRight, 
+  ChevronLeft, 
+  FileText, 
+  Calendar, 
+  Download, 
+  Sparkles,
+  CheckCircle2,
+  GitBranch
+} from 'lucide-react';
+import ConsultationModal from '../../../components/ConsultationModal';
+
+const iconMap = {
+  Lightbulb,
+  Palette,
+  Code,
+  Shield,
+  Rocket,
+  Settings
+};
 
 const DevelopmentProcessSection = () => {
   const [activePhase, setActivePhase] = useState(0);
+  const [isConsultOpen, setIsConsultOpen] = useState(false);
 
   const processPhases = [
     {
@@ -25,9 +51,7 @@ const DevelopmentProcessSection = () => {
         'Technical Architecture Plan',
         'Project Timeline & Milestones'
       ],
-      icon: 'Lightbulb',
-      color: 'from-yellow-500 to-orange-500',
-      bgColor: 'bg-yellow-50'
+      icon: 'Lightbulb'
     },
     {
       id: 'design',
@@ -48,9 +72,7 @@ const DevelopmentProcessSection = () => {
         'Visual Design Mockups',
         'Design System Guidelines'
       ],
-      icon: 'Palette',
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-purple-50'
+      icon: 'Palette'
     },
     {
       id: 'development',
@@ -71,9 +93,7 @@ const DevelopmentProcessSection = () => {
         'Database Schema',
         'Integration Reports'
       ],
-      icon: 'Code',
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-50'
+      icon: 'Code'
     },
     {
       id: 'testing',
@@ -94,9 +114,7 @@ const DevelopmentProcessSection = () => {
         'Security Audit Report',
         'Device Compatibility Matrix'
       ],
-      icon: 'Shield',
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-50'
+      icon: 'Shield'
     },
     {
       id: 'deployment',
@@ -117,9 +135,7 @@ const DevelopmentProcessSection = () => {
         'Marketing Assets',
         'Post-Launch Support Plan'
       ],
-      icon: 'Rocket',
-      color: 'from-red-500 to-pink-500',
-      bgColor: 'bg-red-50'
+      icon: 'Rocket'
     },
     {
       id: 'maintenance',
@@ -140,229 +156,177 @@ const DevelopmentProcessSection = () => {
         'Security Reports',
         'Enhancement Recommendations'
       ],
-      icon: 'Settings',
-      color: 'from-gray-500 to-slate-500',
-      bgColor: 'bg-gray-50'
+      icon: 'Settings'
     }
   ];
 
+  const handleDownloadGuide = () => {
+    const text = [
+      'RED HAND SOLUTIONS - APP DEVELOPMENT PROCESS GUIDE',
+      '===================================================\n',
+      ...processPhases.map((p, idx) => 
+        `PHASE ${idx + 1}: ${p.title} (${p.duration})\n${p.description}\n\nACTIVITIES:\n${p.activities.map(a => ` - ${a}`).join('\n')}\n\nDELIVERABLES:\n${p.deliverables.map(d => ` - ${d}`).join('\n')}\n` +
+        '---------------------------------------------------\n'
+      ),
+      'Contact: +91 6352412728 | redhand.solution@gmail.com | Rajkot, Gujarat'
+    ].join('\n');
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Red-Hand-Solutions-Development-Guide.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const currentPhase = processPhases[activePhase];
+  const CurrentIcon = iconMap[currentPhase.icon] || Code;
+
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Icon name="GitBranch" size={16} />
-            <span>Development Process</span>
+    <>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <GitBranch className="w-4 h-4" /> 6-Stage Agile Lifecycle
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Our Proven
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              Development Methodology
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            Our Proven <br />
+            <span className="text-red-600 dark:text-red-500">Development Methodology</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             We follow a structured, agile approach to mobile app development, ensuring transparency, quality, and timely delivery at every stage.
           </p>
         </div>
 
-        {/* Process Timeline */}
-        <div className="relative mb-16">
-          {/* Timeline Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-secondary to-accent rounded-full hidden lg:block"></div>
+        {/* Phase Selectors */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+          {processPhases.map((phase, idx) => {
+            const IconComp = iconMap[phase.icon] || Code;
+            const isSelected = activePhase === idx;
 
-          {/* Process Steps */}
-          <div className="space-y-12 lg:space-y-16">
-            {processPhases?.map((phase, index) => (
-              <div
-                key={phase?.id}
-                className={`relative cursor-pointer transition-all duration-500 ${
-                  activePhase === index ? 'transform scale-105' : ''
+            return (
+              <button
+                key={phase.id}
+                onClick={() => setActivePhase(idx)}
+                className={`p-4 rounded-2xl border transition-all text-center flex flex-col items-center gap-2 ${
+                  isSelected
+                    ? 'border-red-500 bg-red-600 text-white shadow-lg shadow-red-600/30'
+                    : 'glass-card border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-red-500/40'
                 }`}
-                onClick={() => setActivePhase(index)}
               >
-                <div className={`grid lg:grid-cols-2 gap-8 items-center ${
-                  index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-                }`}>
-                  {/* Content Side */}
-                  <div className={`${index % 2 === 1 ? 'lg:order-2 lg:text-right' : ''}`}>
-                    <div className={`inline-block p-8 bg-white rounded-2xl shadow-brand hover:shadow-brand-lg transition-all duration-300 ${
-                      activePhase === index ? 'ring-2 ring-secondary' : ''
-                    }`}>
-                      <div className={`flex items-center space-x-4 mb-4 ${
-                        index % 2 === 1 ? 'lg:flex-row-reverse lg:space-x-reverse' : ''
-                      }`}>
-                        <div className={`w-16 h-16 bg-gradient-to-br ${phase?.color} rounded-2xl flex items-center justify-center`}>
-                          <Icon name={phase?.icon} size={28} color="white" />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-900">{phase?.title}</h3>
-                          <div className="text-secondary font-semibold">{phase?.duration}</div>
-                        </div>
-                      </div>
-                      <p className="text-gray-600 leading-relaxed mb-6">
-                        {phase?.description}
-                      </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-secondary text-secondary hover:bg-secondary hover:text-white"
-                        iconName="ChevronRight"
-                        iconPosition="right"
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Timeline Node */}
-                  <div className="hidden lg:flex justify-center">
-                    <div className={`w-8 h-8 rounded-full border-4 border-white shadow-brand transition-all duration-300 ${
-                      activePhase === index 
-                        ? `bg-gradient-to-br ${phase?.color} scale-125` 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}></div>
-                  </div>
-
-                  {/* Visual Side */}
-                  <div className={`${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                    <div className={`${phase?.bgColor} rounded-2xl p-8 h-64 flex items-center justify-center`}>
-                      <div className="text-center">
-                        <div className={`w-24 h-24 bg-gradient-to-br ${phase?.color} rounded-3xl flex items-center justify-center mx-auto mb-4 animate-float`}>
-                          <Icon name={phase?.icon} size={40} color="white" />
-                        </div>
-                        <div className="text-lg font-semibold text-gray-700">Phase {index + 1}</div>
-                        <div className="text-sm text-gray-500">{phase?.duration}</div>
-                      </div>
-                    </div>
-                  </div>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/[0.06]'}`}>
+                  <IconComp className="w-5 h-5" />
                 </div>
-              </div>
-            ))}
-          </div>
+                <span className="text-xs font-bold leading-tight line-clamp-1">{phase.title}</span>
+                <span className={`text-[10px] ${isSelected ? 'text-white/80' : 'text-gray-400'}`}>{phase.duration}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Detailed Phase View */}
-        <div className="bg-white rounded-3xl shadow-brand-lg overflow-hidden">
-          <div className={`${processPhases?.[activePhase]?.bgColor} p-8 border-b`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className={`w-16 h-16 bg-gradient-to-br ${processPhases?.[activePhase]?.color} rounded-2xl flex items-center justify-center`}>
-                  <Icon name={processPhases?.[activePhase]?.icon} size={28} color="white" />
-                </div>
-                <div>
-                  <h3 className="text-3xl font-bold text-gray-900">{processPhases?.[activePhase]?.title}</h3>
-                  <div className="text-lg text-secondary font-semibold">{processPhases?.[activePhase]?.duration}</div>
-                </div>
+        {/* Detailed Phase Inspection Box */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 shadow-2xl text-left mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-200 dark:border-white/10 mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center justify-center">
+                <CurrentIcon className="w-7 h-7" />
               </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500">Phase</div>
-                <div className="text-2xl font-bold text-gray-900">{activePhase + 1}/6</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-8">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Activities */}
               <div>
-                <h4 className="text-2xl font-bold text-gray-900 mb-6">Key Activities</h4>
-                <div className="space-y-4">
-                  {processPhases?.[activePhase]?.activities?.map((activity, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 bg-secondary rounded-full"></div>
-                      </div>
-                      <span className="text-gray-700 leading-relaxed">{activity}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Deliverables */}
-              <div>
-                <h4 className="text-2xl font-bold text-gray-900 mb-6">Deliverables</h4>
-                <div className="space-y-4">
-                  {processPhases?.[activePhase]?.deliverables?.map((deliverable, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
-                      <Icon name="FileText" size={20} className="text-secondary flex-shrink-0" />
-                      <span className="text-gray-700 font-medium">{deliverable}</span>
-                    </div>
-                  ))}
-                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
+                  Phase {activePhase + 1} of 6 • {currentPhase.duration}
+                </span>
+                <h3 className="text-2xl font-black text-gray-900 dark:text-white">
+                  {currentPhase.title}
+                </h3>
               </div>
             </div>
 
-            {/* Navigation */}
-            <div className="flex items-center justify-between mt-12 pt-8 border-t border-gray-200">
-              <Button
-                variant="outline"
+            <div className="flex items-center gap-2">
+              <button
                 onClick={() => setActivePhase(Math.max(0, activePhase - 1))}
                 disabled={activePhase === 0}
-                iconName="ChevronLeft"
-                iconPosition="left"
+                className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/[0.06] hover:bg-gray-200 dark:hover:bg-white/[0.12] disabled:opacity-30 transition-colors"
+                title="Previous Phase"
               >
-                Previous Phase
-              </Button>
-
-              <div className="flex space-x-2">
-                {processPhases?.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActivePhase(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      activePhase === index ? 'bg-secondary scale-125' : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                  ></button>
-                ))}
-              </div>
-
-              <Button
-                variant="outline"
-                onClick={() => setActivePhase(Math.min(processPhases?.length - 1, activePhase + 1))}
-                disabled={activePhase === processPhases?.length - 1}
-                iconName="ChevronRight"
-                iconPosition="right"
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setActivePhase(Math.min(processPhases.length - 1, activePhase + 1))}
+                disabled={activePhase === processPhases.length - 1}
+                className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/[0.06] hover:bg-gray-200 dark:hover:bg-white/[0.12] disabled:opacity-30 transition-colors"
+                title="Next Phase"
               >
-                Next Phase
-              </Button>
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+            {currentPhase.description}
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Activities */}
+            <div className="p-6 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-200/80 dark:border-white/5 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-2">
+                Sprint Activities
+              </h4>
+              {currentPhase.activities.map((act, i) => (
+                <div key={i} className="flex items-start gap-2.5 text-xs text-gray-700 dark:text-gray-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  <span>{act}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Deliverables */}
+            <div className="p-6 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-200/80 dark:border-white/5 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 mb-2">
+                Signed Deliverables
+              </h4>
+              {currentPhase.deliverables.map((deliv, i) => (
+                <div key={i} className="flex items-center gap-2.5 text-xs text-gray-700 dark:text-gray-300">
+                  <FileText className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span className="font-medium">{deliv}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-secondary to-accent rounded-3xl p-12 text-white">
-            <h3 className="text-3xl font-bold mb-4">
-              Ready to Start Your App Development Journey?
-            </h3>
-            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              Let's discuss your project requirements and create a customized development plan that fits your timeline and budget.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                variant="secondary"
-                size="lg"
-                className="bg-white text-secondary hover:bg-gray-100"
-                iconName="Calendar"
-                iconPosition="left"
-              >
-                Schedule Strategy Session
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white text-white hover:bg-white/10"
-                iconName="Download"
-                iconPosition="left"
-              >
-                Download Process Guide
-              </Button>
-            </div>
+        {/* Bottom Banner */}
+        <div className="rounded-3xl glass-card border border-red-500/30 p-8 sm:p-12 text-center shadow-xl">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-3">
+            Ready to Start Your App Development Journey?
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300 max-w-xl mx-auto mb-8">
+            Let's discuss your project requirements and create a customized development plan that fits your timeline and budget.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => setIsConsultOpen(true)}
+              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2"
+            >
+              <Calendar className="w-4 h-4" /> Schedule Strategy Session
+            </button>
+            <button
+              onClick={handleDownloadGuide}
+              className="px-8 py-3.5 rounded-xl bg-white dark:bg-white/[0.06] hover:bg-gray-100 dark:hover:bg-white/[0.12] text-gray-800 dark:text-gray-200 font-bold text-xs uppercase tracking-wider border border-gray-200 dark:border-white/10 transition-all flex items-center justify-center gap-2"
+            >
+              <Download className="w-4 h-4 text-red-500" /> Download Process Guide (.txt)
+            </button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <ConsultationModal
+        isOpen={isConsultOpen}
+        onClose={() => setIsConsultOpen(false)}
+        initialService={`App Development Strategy (${currentPhase.title})`}
+      />
+    </>
   );
 };
 

@@ -1,9 +1,33 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { motion } from 'framer-motion';
+import { 
+  Smartphone, 
+  Layers, 
+  TrendingUp, 
+  Settings, 
+  Palette, 
+  CheckCircle2, 
+  Calendar, 
+  Download, 
+  ArrowRight, 
+  Phone,
+  Sparkles,
+  Code
+} from 'lucide-react';
+import ConsultationModal from '../../../components/ConsultationModal';
+
+const iconMap = {
+  Apple: Smartphone,
+  Smartphone: Smartphone,
+  Layers: Layers,
+  TrendingUp: TrendingUp,
+  Settings: Settings,
+  Palette: Palette
+};
 
 const ServicesSection = () => {
   const [activeService, setActiveService] = useState(0);
+  const [isConsultOpen, setIsConsultOpen] = useState(false);
 
   const services = [
     {
@@ -22,7 +46,7 @@ const ServicesSection = () => {
       pricing: '₹2,50,000 - ₹8,00,000',
       timeline: '12-20 weeks',
       icon: 'Apple',
-      color: 'from-gray-600 to-gray-800'
+      color: 'from-gray-700 to-gray-900'
     },
     {
       id: 'native-android',
@@ -40,7 +64,7 @@ const ServicesSection = () => {
       pricing: '₹2,00,000 - ₹7,50,000',
       timeline: '10-18 weeks',
       icon: 'Smartphone',
-      color: 'from-green-600 to-green-800'
+      color: 'from-emerald-600 to-green-700'
     },
     {
       id: 'cross-platform',
@@ -58,7 +82,7 @@ const ServicesSection = () => {
       pricing: '₹1,50,000 - ₹5,00,000',
       timeline: '8-14 weeks',
       icon: 'Layers',
-      color: 'from-blue-600 to-purple-600'
+      color: 'from-red-600 to-rose-700'
     },
     {
       id: 'app-store-optimization',
@@ -76,7 +100,7 @@ const ServicesSection = () => {
       pricing: '₹25,000 - ₹75,000/month',
       timeline: 'Ongoing',
       icon: 'TrendingUp',
-      color: 'from-orange-600 to-red-600'
+      color: 'from-amber-600 to-orange-700'
     },
     {
       id: 'maintenance-support',
@@ -94,7 +118,7 @@ const ServicesSection = () => {
       pricing: '₹15,000 - ₹50,000/month',
       timeline: 'Ongoing',
       icon: 'Settings',
-      color: 'from-purple-600 to-pink-600'
+      color: 'from-purple-600 to-indigo-700'
     },
     {
       id: 'ui-ux-design',
@@ -112,209 +136,195 @@ const ServicesSection = () => {
       pricing: '₹75,000 - ₹2,50,000',
       timeline: '4-8 weeks',
       icon: 'Palette',
-      color: 'from-pink-600 to-rose-600'
+      color: 'from-rose-600 to-red-600'
     }
   ];
 
+  const handleDownloadBrochure = () => {
+    const text = [
+      'RED HAND SOLUTIONS - MOBILE APP DEVELOPMENT SERVICES',
+      '====================================================\n',
+      ...services.map(s => 
+        `SERVICE: ${s.title}\nINVESTMENT: ${s.pricing} | TIMELINE: ${s.timeline}\nDESCRIPTION: ${s.description}\nFEATURES:\n${s.features.map(f => ` - ${f}`).join('\n')}\nTECH STACK: ${s.technologies.join(', ')}\n` +
+        '----------------------------------------------------\n'
+      ),
+      'Call: +91 6352412728 | redhand.solution@gmail.com | Rajkot, Gujarat'
+    ].join('\n');
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Red-Hand-Solutions-Mobile-Services.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Icon name="Code" size={16} />
-            <span>Our Services</span>
+    <>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Code className="w-4 h-4" /> Full-Cycle Mobile Engineering
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Complete Mobile App
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              Development Services
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            Complete Mobile App <br />
+            <span className="text-red-600 dark:text-red-500">Development Services</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             From native iOS and Android development to cross-platform solutions, we provide end-to-end mobile app development services tailored for Gujarat businesses.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="default"
-              size="lg"
-              className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 shadow-brand-lg"
-              iconName="Calendar"
-              iconPosition="left"
-              onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-            >
-              Schedule Consultation
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              iconName="MessageCircle"
-              iconPosition="left"
-              onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-            >
-              Free App Consultation
-            </Button>
-          </div>
         </div>
 
         {/* Services Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
-          {services?.map((service, index) => (
-            <div
-              key={service?.id}
-              className={`group cursor-pointer transition-all duration-300 ${
-                activeService === index
-                  ? 'transform -translate-y-2'
-                  : 'hover:transform hover:-translate-y-1'
-              }`}
-              onClick={() => setActiveService(index)}
-            >
-              <div className={`relative p-8 bg-white rounded-2xl shadow-brand hover:shadow-brand-lg transition-all duration-300 border-2 ${
-                activeService === index ? 'border-secondary' : 'border-transparent'
-              }`}>
-                {/* Service Icon */}
-                <div className={`w-16 h-16 bg-gradient-to-br ${service?.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon name={service?.icon} size={28} color="white" />
-                </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 text-left">
+          {services.map((service, index) => {
+            const IconComp = iconMap[service.icon] || Smartphone;
+            const isSelected = activeService === index;
 
-                {/* Service Content */}
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-secondary transition-colors">
-                    {service?.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {service?.description}
-                  </p>
-
-                  {/* Pricing & Timeline */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div>
-                      <div className="text-sm text-gray-500">Starting from</div>
-                      <div className="font-bold text-secondary">{service?.pricing}</div>
+            return (
+              <div
+                key={service.id}
+                onClick={() => setActiveService(index)}
+                className={`p-7 rounded-2xl cursor-pointer transition-all duration-300 glass-card border flex flex-col justify-between ${
+                  isSelected
+                    ? 'border-red-500 shadow-xl shadow-red-500/10 ring-2 ring-red-500/30'
+                    : 'border-gray-200/80 dark:border-white/10 hover:border-red-500/40'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center justify-center">
+                      <IconComp className="w-6 h-6" />
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-500">Timeline</div>
-                      <div className="font-semibold text-gray-900">{service?.timeline}</div>
-                    </div>
+                    {isSelected && (
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
+                    )}
                   </div>
 
-                  {/* Active Indicator */}
-                  {activeService === index && (
-                    <div className="absolute top-4 right-4">
-                      <div className="w-3 h-3 bg-secondary rounded-full animate-pulse"></div>
-                    </div>
-                  )}
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    {service.title}
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    {service.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-xs">
+                  <div>
+                    <span className="text-gray-400 block text-[10px] uppercase font-semibold">Investment</span>
+                    <span className="font-bold text-red-600 dark:text-red-400">{service.pricing}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-gray-400 block text-[10px] uppercase font-semibold">Timeline</span>
+                    <span className="font-bold text-gray-800 dark:text-gray-200">{service.timeline}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Detailed Service View */}
-        <div className="bg-white rounded-3xl shadow-brand-lg p-8 lg:p-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Left Column - Service Details */}
-            <div className="space-y-8">
-              <div>
-                <div className={`inline-flex items-center space-x-3 bg-gradient-to-r ${services?.[activeService]?.color} text-white px-6 py-3 rounded-full mb-6`}>
-                  <Icon name={services?.[activeService]?.icon} size={20} />
-                  <span className="font-semibold">{services?.[activeService]?.title}</span>
-                </div>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {services?.[activeService]?.description}
-                </p>
+        {/* Detailed Service Deep Dive */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 shadow-2xl text-left">
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
+            {/* Left Info */}
+            <div className="lg:col-span-7 space-y-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider">
+                {services[activeService].timeline} Implementation
               </div>
 
-              {/* Features List */}
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
+                {services[activeService].title}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+                {services[activeService].description}
+              </p>
+
               <div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Key Features</h4>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {services?.[activeService]?.features?.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700">{feature}</span>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-3">
+                  Key Capabilities
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-2.5">
+                  {services[activeService].features.map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <span>{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Technologies */}
               <div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Technologies Used</h4>
-                <div className="flex flex-wrap gap-2">
-                  {services?.[activeService]?.technologies?.map((tech, index) => (
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-3">
+                  Technologies Deployed
+                </h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {services[activeService].technologies.map((t, i) => (
                     <span
-                      key={index}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+                      key={i}
+                      className="px-3 py-1 text-xs rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-800 dark:text-gray-200 font-medium border border-gray-200/60 dark:border-white/5"
                     >
-                      {tech}
+                      {t}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Pricing & CTA */}
-            <div className="space-y-8">
-              {/* Pricing Card */}
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
-                <h4 className="text-2xl font-bold text-gray-900 mb-4">Investment Details</h4>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Starting Price</span>
-                    <span className="text-2xl font-bold text-secondary">{services?.[activeService]?.pricing}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Timeline</span>
-                    <span className="font-semibold text-gray-900">{services?.[activeService]?.timeline}</span>
-                  </div>
-                  <div className="pt-4 border-t border-gray-200">
-                    <div className="text-sm text-gray-500 mb-2">What's Included:</div>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Complete project documentation</li>
-                      <li>• Source code & deployment</li>
-                      <li>• 3 months free support</li>
-                      <li>• App store submission</li>
-                    </ul>
-                  </div>
+            {/* Right Card: Pricing, Deliverables, CTA */}
+            <div className="lg:col-span-5 p-7 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-200/80 dark:border-white/10 space-y-6">
+              <div>
+                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold block mb-1">
+                  Investment Estimate
+                </span>
+                <div className="text-2xl font-black text-red-600 dark:text-red-400">
+                  {services[activeService].pricing}
                 </div>
+                <span className="text-xs text-gray-500">Timeline: {services[activeService].timeline}</span>
               </div>
 
-              {/* CTA Buttons */}
-              <div className="space-y-4">
-                <Button
-                  variant="default"
-                  size="lg"
-                  fullWidth
-                  className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 text-white shadow-brand"
-                  iconName="Calendar"
-                  iconPosition="left"
-                  onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-                >
-                  Schedule Consultation
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  fullWidth
-                  iconName="Download"
-                  iconPosition="left"
-                >
-                  Download Service Brochure
-                </Button>
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-2 text-xs text-gray-600 dark:text-gray-300">
+                <span className="font-bold text-gray-900 dark:text-white block mb-1">Included In Every Project:</span>
+                <p>• Complete project documentation & architectural schema</p>
+                <p>• Full source code ownership & deployment pipelines</p>
+                <p>• 3 months guaranteed post-launch maintenance & bug-fixing</p>
+                <p>• App Store & Google Play Store submission & approval guarantee</p>
               </div>
 
-              {/* Contact Info */}
-              <div className="text-center p-6 bg-gradient-to-r from-secondary/5 to-accent/5 rounded-xl">
-                <div className="text-sm text-gray-600 mb-2">Need a custom quote?</div>
-                <div className="font-semibold text-gray-900">Call: +91 6352412728</div>
-                <div className="text-sm text-gray-600">Free consultation available</div>
+              <div className="space-y-3 pt-2">
+                <button
+                  onClick={() => setIsConsultOpen(true)}
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Calendar className="w-4 h-4" /> Schedule App Consultation
+                </button>
+
+                <button
+                  onClick={handleDownloadBrochure}
+                  className="w-full py-3.5 rounded-xl bg-white dark:bg-white/[0.06] hover:bg-gray-100 dark:hover:bg-white/[0.12] text-gray-800 dark:text-gray-200 font-bold text-xs uppercase tracking-wider border border-gray-200 dark:border-white/10 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Download className="w-4 h-4 text-red-500" /> Download Service Brochure (.txt)
+                </button>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-red-50/70 dark:bg-red-950/20 border border-red-200/50 dark:border-red-900/30 text-center text-xs">
+                <span className="text-gray-500 dark:text-gray-400 block mb-1">Direct Engineering Hotline:</span>
+                <a href="tel:+916352412728" className="font-bold text-red-600 dark:text-red-400 text-sm hover:underline">
+                  +91 6352412728
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <ConsultationModal
+        isOpen={isConsultOpen}
+        onClose={() => setIsConsultOpen(false)}
+        initialService={services[activeService].title}
+      />
+    </>
   );
 };
 

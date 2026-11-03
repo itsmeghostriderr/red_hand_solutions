@@ -1,16 +1,61 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { motion } from 'framer-motion';
+import { 
+  Smartphone, 
+  Server, 
+  Database, 
+  Settings, 
+  Layers, 
+  Zap, 
+  Code, 
+  Cloud, 
+  HardDrive, 
+  Package, 
+  Send, 
+  Palette, 
+  Shield, 
+  TrendingUp,
+  CreditCard,
+  Share2,
+  BarChart3,
+  Bell,
+  MapPin,
+  Download,
+  MessageCircle,
+  Sparkles
+} from 'lucide-react';
+import ConsultationModal from '../../../components/ConsultationModal';
+
+const iconMap = {
+  Smartphone,
+  Server,
+  Database,
+  Settings,
+  Layers,
+  Zap,
+  Code,
+  Cloud,
+  HardDrive,
+  Package,
+  Send,
+  Palette,
+  CreditCard,
+  Share2,
+  BarChart3,
+  Bell,
+  MapPin,
+  CloudLightning: Zap
+};
 
 const TechnologyStackSection = () => {
   const [activeCategory, setActiveCategory] = useState('frontend');
+  const [isConsultOpen, setIsConsultOpen] = useState(false);
 
   const technologyCategories = {
     frontend: {
       title: 'Frontend Development',
       description: 'Modern frameworks and tools for creating exceptional user interfaces',
       icon: 'Smartphone',
-      color: 'from-blue-600 to-purple-600',
       technologies: [
         {
           name: 'React Native',
@@ -22,7 +67,7 @@ const TechnologyStackSection = () => {
         },
         {
           name: 'Flutter',
-          description: 'Google\'s UI toolkit for beautiful, natively compiled applications',
+          description: "Google's UI toolkit for beautiful, natively compiled applications",
           proficiency: 88,
           projects: 45,
           icon: 'Zap',
@@ -33,7 +78,7 @@ const TechnologyStackSection = () => {
           description: 'Native iOS development for optimal performance and user experience',
           proficiency: 92,
           projects: 80,
-          icon: 'Apple',
+          icon: 'Smartphone',
           features: ['Native Performance', 'iOS Guidelines', 'App Store Optimization', 'Latest Features']
         },
         {
@@ -50,7 +95,6 @@ const TechnologyStackSection = () => {
       title: 'Backend Development',
       description: 'Robust server-side solutions and API development',
       icon: 'Server',
-      color: 'from-green-600 to-teal-600',
       technologies: [
         {
           name: 'Node.js',
@@ -70,7 +114,7 @@ const TechnologyStackSection = () => {
         },
         {
           name: 'Firebase',
-          description: 'Google\'s platform for mobile and web application development',
+          description: "Google's platform for mobile and web application development",
           proficiency: 91,
           projects: 95,
           icon: 'Cloud',
@@ -81,7 +125,7 @@ const TechnologyStackSection = () => {
           description: 'Comprehensive cloud computing platform for scalable solutions',
           proficiency: 85,
           projects: 70,
-          icon: 'CloudLightning',
+          icon: 'Cloud',
           features: ['EC2', 'Lambda', 'RDS', 'S3 Storage']
         }
       ]
@@ -90,7 +134,6 @@ const TechnologyStackSection = () => {
       title: 'Database Solutions',
       description: 'Efficient data storage and management systems',
       icon: 'Database',
-      color: 'from-orange-600 to-red-600',
       technologies: [
         {
           name: 'MongoDB',
@@ -130,14 +173,13 @@ const TechnologyStackSection = () => {
       title: 'Development Tools',
       description: 'Essential tools and platforms for efficient development workflow',
       icon: 'Settings',
-      color: 'from-purple-600 to-pink-600',
       technologies: [
         {
           name: 'Git & GitHub',
           description: 'Version control and collaborative development platform',
           proficiency: 96,
           projects: 200,
-          icon: 'GitBranch',
+          icon: 'Code',
           features: ['Version Control', 'Collaboration', 'CI/CD', 'Code Review']
         },
         {
@@ -168,222 +210,236 @@ const TechnologyStackSection = () => {
     }
   };
 
-  const categories = Object.keys(technologyCategories);
+  const handleDownloadTechGuide = () => {
+    const lines = [
+      'RED HAND SOLUTIONS - MOBILE TECHNOLOGY MATRIX',
+      '==============================================\n'
+    ];
+    Object.entries(technologyCategories).forEach(([catKey, cat]) => {
+      lines.push(`CATEGORY: ${cat.title.toUpperCase()}\n${cat.description}\n`);
+      cat.technologies.forEach(t => {
+        lines.push(` - ${t.name} (Proficiency: ${t.proficiency}%, ${t.projects}+ projects)`);
+        lines.push(`   Features: ${t.features.join(', ')}`);
+        lines.push(`   Role: ${t.description}`);
+      });
+      lines.push('\n----------------------------------------------\n');
+    });
+    lines.push('Contact: +91 6352412728 | redhand.solution@gmail.com | Rajkot, Gujarat');
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Red-Hand-Solutions-Technology-Stack.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const currentCategory = technologyCategories[activeCategory];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Icon name="Code" size={16} />
-            <span>Technology Stack</span>
+    <>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-4 h-4" /> Enterprise Engineering Stack
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Cutting-Edge
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              Technologies We Use
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            Cutting-Edge <br />
+            <span className="text-red-600 dark:text-red-500">Technologies We Use</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications that meet modern business requirements.
           </p>
         </div>
 
-        {/* Category Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories?.map((category) => {
-            const categoryData = technologyCategories?.[category];
+        {/* Category Tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+          {Object.entries(technologyCategories).map(([key, cat]) => {
+            const isSelected = activeCategory === key;
+            const IconComp = iconMap[cat.icon] || Code;
+
             return (
               <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`flex items-center space-x-3 px-6 py-3 rounded-full transition-all duration-300 ${
-                  activeCategory === category
-                    ? `bg-gradient-to-r ${categoryData?.color} text-white shadow-brand`
-                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                key={key}
+                onClick={() => setActiveCategory(key)}
+                className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
+                    : 'glass-card border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-red-500/40'
                 }`}
               >
-                <Icon name={categoryData?.icon} size={20} />
-                <span className="font-medium">{categoryData?.title}</span>
+                <IconComp className="w-4 h-4" />
+                <span>{cat.title}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Technology Grid */}
-        <div className="mb-16">
-          <div className={`text-center mb-12 p-8 bg-gradient-to-r ${technologyCategories?.[activeCategory]?.color} rounded-3xl text-white`}>
-            <div className="flex items-center justify-center space-x-4 mb-4">
-              <Icon name={technologyCategories?.[activeCategory]?.icon} size={32} />
-              <h3 className="text-3xl font-bold">{technologyCategories?.[activeCategory]?.title}</h3>
-            </div>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              {technologyCategories?.[activeCategory]?.description}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {technologyCategories?.[activeCategory]?.technologies?.map((tech, index) => (
-              <div
-                key={tech?.name}
-                className="bg-white rounded-2xl shadow-brand hover:shadow-brand-lg transition-all duration-300 p-8 group"
+        {/* Tech Grid */}
+        <div className="grid md:grid-cols-2 gap-6 mb-16 text-left">
+          {currentCategory.technologies.map((tech, index) => {
+            const TechIcon = iconMap[tech.icon] || Code;
+            return (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.08 }}
+                className="p-7 rounded-2xl glass-card border border-gray-200/80 dark:border-white/10 hover:border-red-500/40 transition-all flex flex-col justify-between"
               >
-                {/* Technology Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${technologyCategories?.[activeCategory]?.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon name={tech?.icon} size={28} color="white" />
-                    </div>
-                    <div>
-                      <h4 className="text-2xl font-bold text-gray-900 group-hover:text-secondary transition-colors">
-                        {tech?.name}
-                      </h4>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>{tech?.projects}+ projects</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  {tech?.description}
-                </p>
-
-                {/* Proficiency Bar */}
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">Proficiency</span>
-                    <span className="text-sm font-bold text-secondary">{tech?.proficiency}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className={`bg-gradient-to-r ${technologyCategories?.[activeCategory]?.color} h-2 rounded-full transition-all duration-1000 ease-out`}
-                      style={{ width: `${tech?.proficiency}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* Features */}
                 <div>
-                  <h5 className="text-lg font-semibold text-gray-900 mb-3">Key Features</h5>
-                  <div className="grid grid-cols-2 gap-2">
-                    {tech?.features?.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0"></div>
-                        <span className="text-sm text-gray-600">{feature}</span>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center justify-center">
+                        <TechIcon className="w-6 h-6" />
                       </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                          {tech.name}
+                        </h4>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold">
+                          {tech.projects}+ delivered projects
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-xs font-black px-2.5 py-1 rounded-full bg-red-600/10 text-red-600 dark:text-red-400 border border-red-500/20">
+                      {tech.proficiency}%
+                    </span>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-5 leading-relaxed">
+                    {tech.description}
+                  </p>
+
+                  {/* Proficiency Bar */}
+                  <div className="mb-5">
+                    <div className="w-full bg-gray-100 dark:bg-white/10 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-red-600 to-red-500 h-full rounded-full transition-all duration-700"
+                        style={{ width: `${tech.proficiency}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-2">
+                    Key Features
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tech.features.map((feat, i) => (
+                      <span
+                        key={i}
+                        className="px-2.5 py-0.5 rounded-md bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 text-[11px] font-medium"
+                      >
+                        ✓ {feat}
+                      </span>
                     ))}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Technology Comparison */}
-        <div className="bg-white rounded-3xl shadow-brand-lg p-8 lg:p-12 mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-8">
+        {/* 3 Architecture Pillars */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 mb-16 shadow-2xl">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-8">
             Why We Choose These Technologies
           </h3>
-          
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-3xl flex items-center justify-center mx-auto mb-4">
-                <Icon name="Zap" size={32} color="white" />
+
+          <div className="grid md:grid-cols-3 gap-6 text-center">
+            <div className="p-6 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5">
+              <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-7 h-7" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Performance</h4>
-              <p className="text-gray-600">
-                Selected technologies ensure optimal performance, fast loading times, and smooth user experiences across all devices.
+              <h4 className="text-base font-bold text-gray-900 dark:text-white mb-2">Peak Performance</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Selected technologies ensure optimal memory footprint, sub-100ms API responses, and smooth 60fps rendering across budget and flagship mobile devices.
               </p>
             </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-500 rounded-3xl flex items-center justify-center mx-auto mb-4">
-                <Icon name="Shield" size={32} color="white" />
+
+            <div className="p-6 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5">
+              <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-7 h-7" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Security</h4>
-              <p className="text-gray-600">
-                Enterprise-grade security features and best practices to protect your app and user data from potential threats.
+              <h4 className="text-base font-bold text-gray-900 dark:text-white mb-2">Hardened Security</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Enterprise encryption standards, secure biometric tokens, OWASP mobile top-10 compliance, and isolated data containers protecting corporate IP.
               </p>
             </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto mb-4">
-                <Icon name="TrendingUp" size={32} color="white" />
+
+            <div className="p-6 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5">
+              <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-7 h-7" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Scalability</h4>
-              <p className="text-gray-600">
-                Future-proof architecture that grows with your business, handling increased users and feature requirements.
+              <h4 className="text-base font-bold text-gray-900 dark:text-white mb-2">Infinite Scalability</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Cloud-native architecture designed to grow seamlessly from 1,000 initial beta testers to millions of concurrent active users without downtime.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Integration Showcase */}
-        <div className="bg-gradient-to-r from-gray-900 to-black rounded-3xl p-8 lg:p-12 text-white">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Seamless Integrations</h3>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              We integrate with popular third-party services and APIs to enhance your app's functionality
-            </p>
-          </div>
+        {/* Seamless Integrations */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 mb-14 text-center">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+            Seamless 3rd-Party Integrations
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-8">
+            We integrate with top-tier third-party ecosystems, payment gateways, and backend protocols
+          </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { name: 'Payment Gateways', icon: 'CreditCard' },
-              { name: 'Social Media', icon: 'Share2' },
-              { name: 'Analytics', icon: 'BarChart3' },
-              { name: 'Push Notifications', icon: 'Bell' },
-              { name: 'Maps & Location', icon: 'MapPin' },
-              { name: 'Cloud Storage', icon: 'Cloud' }
-            ]?.map((integration, index) => (
-              <div key={index} className="text-center group">
-                <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-white/20 transition-all duration-300">
-                  <Icon name={integration?.icon} size={24} className="text-white" />
+              { name: 'Payment Gateways', icon: CreditCard },
+              { name: 'Social Media', icon: Share2 },
+              { name: 'Analytics', icon: BarChart3 },
+              { name: 'Push Notifications', icon: Bell },
+              { name: 'Maps & Location', icon: MapPin },
+              { name: 'Cloud Storage', icon: Cloud }
+            ].map((item, idx) => {
+              const ItemIcon = item.icon;
+              return (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5 flex flex-col items-center justify-center gap-2 hover:border-red-500/40 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center">
+                    <ItemIcon className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">{item.name}</span>
                 </div>
-                <div className="text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-                  {integration?.name}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-secondary/5 to-accent/5 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Need Help Choosing the Right Technology?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Our technical experts can help you select the perfect technology stack for your specific project requirements and business goals.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                variant="default"
-                size="lg"
-                className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 text-white shadow-brand"
-                iconName="MessageCircle"
-                iconPosition="left"
-                onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-              >
-                Consult Our Experts
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                iconName="Download"
-                iconPosition="left"
-              >
-                Technology Comparison Guide
-              </Button>
-            </div>
-          </div>
+        {/* Action Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={() => setIsConsultOpen(true)}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition-all"
+          >
+            <MessageCircle className="w-4 h-4" /> Consult Our Tech Experts
+          </button>
+          <button
+            onClick={handleDownloadTechGuide}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-white/[0.06] hover:bg-gray-100 dark:hover:bg-white/[0.12] text-gray-800 dark:text-gray-200 font-bold text-xs uppercase tracking-wider border border-gray-200 dark:border-white/10 flex items-center justify-center gap-2 transition-all"
+          >
+            <Download className="w-4 h-4 text-red-500" /> Technology Comparison Guide (.txt)
+          </button>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <ConsultationModal
+        isOpen={isConsultOpen}
+        onClose={() => setIsConsultOpen(false)}
+        initialService={`Mobile Architecture Stack (${currentCategory.title})`}
+      />
+    </>
   );
 };
 

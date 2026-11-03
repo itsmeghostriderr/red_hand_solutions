@@ -14,18 +14,17 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-      <ScrollToTop />
-      <RouterRoutes>
-        {/* Define your route here */}
-        <Route path="/" element={<AboutUs />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/contact-consultation" element={<ContactConsultation />} />
-        <Route path="/services-overview" element={<ServicesOverview />} />
-        <Route path="/mobile-app-development" element={<MobileAppDevelopment />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/homepage" element={<Homepage />} />
-        <Route path="*" element={<NotFound />} />
-      </RouterRoutes>
+        <ScrollToTop />
+        <RouterRoutes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/homepage" element={<Homepage />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/services-overview" element={<ServicesOverview />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/mobile-app-development" element={<MobileAppDevelopment />} />
+          <Route path="/contact-consultation" element={<ContactConsultation />} />
+          <Route path="*" element={<NotFound />} />
+        </RouterRoutes>
       </ErrorBoundary>
     </BrowserRouter>
   );

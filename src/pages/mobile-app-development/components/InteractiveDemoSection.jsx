@@ -1,11 +1,34 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Play, 
+  Pause, 
+  ShoppingBag, 
+  Heart, 
+  Truck, 
+  BookOpen, 
+  Star, 
+  Calendar, 
+  Sparkles, 
+  CheckCircle2,
+  ExternalLink,
+  MessageCircle,
+  Smartphone
+} from 'lucide-react';
 import Image from '../../../components/AppImage';
-import Button from '../../../components/ui/Button';
+import ConsultationModal from '../../../components/ConsultationModal';
+
+const iconMap = {
+  ShoppingBag,
+  Heart,
+  Truck,
+  BookOpen
+};
 
 const InteractiveDemoSection = () => {
   const [activeDemo, setActiveDemo] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isConsultOpen, setIsConsultOpen] = useState(false);
 
   const demoApps = [
     {
@@ -28,7 +51,6 @@ const InteractiveDemoSection = () => {
       },
       technologies: ['React Native', 'Node.js', 'MongoDB', 'Razorpay'],
       mockupImage: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=800&fit=crop',
-      color: 'from-blue-600 to-purple-600',
       icon: 'ShoppingBag'
     },
     {
@@ -51,7 +73,6 @@ const InteractiveDemoSection = () => {
       },
       technologies: ['Flutter', 'Firebase', 'WebRTC', 'Cloud Functions'],
       mockupImage: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=800&fit=crop',
-      color: 'from-green-600 to-teal-600',
       icon: 'Heart'
     },
     {
@@ -74,7 +95,6 @@ const InteractiveDemoSection = () => {
       },
       technologies: ['React Native', 'Google Maps', 'Socket.io', 'Express.js'],
       mockupImage: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=800&fit=crop',
-      color: 'from-orange-600 to-red-600',
       icon: 'Truck'
     },
     {
@@ -97,237 +117,202 @@ const InteractiveDemoSection = () => {
       },
       technologies: ['React Native', 'AWS', 'GraphQL', 'Redis'],
       mockupImage: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=800&fit=crop',
-      color: 'from-purple-600 to-pink-600',
       icon: 'BookOpen'
     }
   ];
 
   const handlePlayDemo = () => {
     setIsPlaying(true);
-    setTimeout(() => setIsPlaying(false), 3000);
+    setTimeout(() => setIsPlaying(false), 3500);
   };
 
+  const currentApp = demoApps[activeDemo];
+
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Icon name="Play" size={16} />
-            <span>Interactive Demos</span>
+    <>
+      <section id="demo-section" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-28">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-4 h-4" /> Interactive Showcase
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Experience Our Apps
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              Across Industries
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            Experience Our Apps <br />
+            <span className="text-red-600 dark:text-red-500">Across Industries</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             Explore interactive demos of mobile applications we've built for different industries, showcasing our expertise in creating user-centric solutions.
           </p>
         </div>
 
-        {/* Demo Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {demoApps?.map((app, index) => (
-            <button
-              key={app?.id}
-              onClick={() => setActiveDemo(index)}
-              className={`flex items-center space-x-3 px-6 py-3 rounded-full transition-all duration-300 ${
-                activeDemo === index
-                  ? `bg-gradient-to-r ${app?.color} text-white shadow-brand`
-                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <Icon name={app?.icon} size={20} />
-              <span className="font-medium">{app?.title}</span>
-            </button>
-          ))}
+        {/* Demo Selector Tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+          {demoApps.map((app, index) => {
+            const IconComp = iconMap[app.icon] || ShoppingBag;
+            const isSelected = activeDemo === index;
+
+            return (
+              <button
+                key={app.id}
+                onClick={() => {
+                  setActiveDemo(index);
+                  setIsPlaying(false);
+                }}
+                className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30'
+                    : 'glass-card border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-red-500/40'
+                }`}
+              >
+                <IconComp className="w-4 h-4" />
+                <span>{app.title}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Main Demo Display */}
-        <div className="bg-white rounded-3xl shadow-brand-lg overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-0">
-            {/* Left Side - App Mockup */}
-            <div className={`relative bg-gradient-to-br ${demoApps?.[activeDemo]?.color} p-12 flex items-center justify-center`}>
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
-                <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-white rounded-full"></div>
-                <div className="absolute top-1/2 left-1/4 w-16 h-16 border border-white rounded-full"></div>
-              </div>
-
-              {/* Phone Mockup */}
-              <div className="relative z-10">
-                <div className="w-72 h-[580px] bg-black rounded-[3rem] p-2 shadow-2xl">
-                  <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
-                    {/* Status Bar */}
-                    <div className="absolute top-0 left-0 right-0 h-12 bg-gray-900 rounded-t-[2.5rem] flex items-center justify-between px-6 text-white text-sm">
-                      <span>9:41</span>
-                      <div className="flex space-x-1">
-                        <div className="w-4 h-2 bg-white rounded-sm"></div>
-                        <div className="w-4 h-2 bg-white rounded-sm"></div>
-                        <div className="w-6 h-2 bg-white rounded-sm"></div>
-                      </div>
-                    </div>
-
-                    {/* App Content */}
-                    <div className="pt-12 h-full overflow-hidden">
-                      <Image
-                        src={demoApps?.[activeDemo]?.mockupImage}
-                        alt={`${demoApps?.[activeDemo]?.title} app mockup`}
-                        className="w-full h-full object-cover"
-                      />
-                      
-                      {/* Play Button Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <button
-                          onClick={handlePlayDemo}
-                          className={`w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-brand-lg transition-all duration-300 ${
-                            isPlaying ? 'scale-110 bg-secondary' : 'hover:scale-105'
-                          }`}
-                        >
-                          <Icon 
-                            name={isPlaying ? "Pause" : "Play"} 
-                            size={32} 
-                            className={isPlaying ? "text-white" : "text-secondary"} 
-                          />
-                        </button>
-                      </div>
-
-                      {/* Demo Status */}
-                      {isPlaying && (
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <div className="bg-black/80 text-white px-4 py-2 rounded-lg text-sm">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                              <span>Live Demo Playing...</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+        {/* Interactive Device Showcase Card */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 shadow-2xl overflow-hidden">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            {/* Left Mockup Stage */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-64 sm:w-72 h-[520px] bg-gradient-to-b from-gray-900 to-black rounded-[3rem] p-2.5 shadow-2xl border-4 border-gray-800 dark:border-white/20 ring-2 ring-red-500/20">
+                <div className="w-full h-full bg-black rounded-[2.3rem] overflow-hidden relative">
+                  {/* Status Bar */}
+                  <div className="absolute top-0 left-0 right-0 h-10 bg-black/80 backdrop-blur-sm flex items-center justify-between px-5 text-white text-[11px] z-20">
+                    <span className="font-bold">9:41</span>
+                    <div className="w-16 h-3 bg-black rounded-full" />
+                    <span>5G • 99%</span>
                   </div>
-                </div>
 
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center animate-float">
-                  <Icon name="Star" size={20} className="text-white" />
-                </div>
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center animate-pulse-slow">
-                  <Icon name="Heart" size={20} className="text-white" />
+                  {/* App Screenshot */}
+                  <Image
+                    src={currentApp.mockupImage}
+                    alt={currentApp.title}
+                    className="w-full h-full object-cover pt-10"
+                  />
+
+                  {/* Interactive Play Button */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center pt-8">
+                    <button
+                      onClick={handlePlayDemo}
+                      className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl ${
+                        isPlaying
+                          ? 'bg-red-600 text-white scale-110 animate-pulse'
+                          : 'bg-white/90 text-red-600 hover:scale-105 hover:bg-white'
+                      }`}
+                    >
+                      {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-1 fill-red-600" />}
+                    </button>
+                  </div>
+
+                  {/* Live Simulation Indicator */}
+                  {isPlaying && (
+                    <div className="absolute bottom-4 left-4 right-4 bg-black/90 backdrop-blur-md text-white p-2.5 rounded-xl text-xs flex items-center gap-2 z-20 border border-white/10">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                      <span className="font-semibold">Simulating {currentApp.subtitle}...</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Right Side - App Details */}
-            <div className="p-12">
-              <div className="space-y-8">
-                {/* App Header */}
-                <div>
-                  <div className={`inline-flex items-center space-x-2 bg-gradient-to-r ${demoApps?.[activeDemo]?.color} text-white px-4 py-2 rounded-full text-sm font-medium mb-4`}>
-                    <Icon name={demoApps?.[activeDemo]?.icon} size={16} />
-                    <span>{demoApps?.[activeDemo]?.title}</span>
+            {/* Right Information Panel */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 block mb-1">
+                  {currentApp.title}
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+                  {currentApp.subtitle}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {currentApp.description}
+                </p>
+              </div>
+
+              {/* KPI Metrics */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/10 text-center">
+                  <div className="text-xl sm:text-2xl font-black text-red-600 dark:text-red-400">
+                    {currentApp.metrics.downloads}
                   </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                    {demoApps?.[activeDemo]?.subtitle}
-                  </h3>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {demoApps?.[activeDemo]?.description}
-                  </p>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Downloads</div>
                 </div>
 
-                {/* App Metrics */}
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="text-center p-4 bg-gray-50 rounded-xl">
-                    <div className="text-2xl font-bold text-secondary">{demoApps?.[activeDemo]?.metrics?.downloads}</div>
-                    <div className="text-sm text-gray-600">Downloads</div>
+                <div className="p-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/10 text-center">
+                  <div className="text-xl sm:text-2xl font-black text-amber-500">
+                    {currentApp.metrics.rating}
                   </div>
-                  <div className="text-center p-4 bg-gray-50 rounded-xl">
-                    <div className="text-2xl font-bold text-secondary">{demoApps?.[activeDemo]?.metrics?.rating}</div>
-                    <div className="text-sm text-gray-600">Rating</div>
-                  </div>
-                  <div className="text-center p-4 bg-gray-50 rounded-xl">
-                    <div className="text-2xl font-bold text-secondary">{demoApps?.[activeDemo]?.metrics?.retention}</div>
-                    <div className="text-sm text-gray-600">Retention</div>
-                  </div>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">User Rating</div>
                 </div>
 
-                {/* Key Features */}
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-4">Key Features</h4>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {demoApps?.[activeDemo]?.features?.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0"></div>
-                        <span className="text-gray-700">{feature}</span>
-                      </div>
-                    ))}
+                <div className="p-3.5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/10 text-center">
+                  <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                    {currentApp.metrics.retention}
                   </div>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Retention</div>
                 </div>
+              </div>
 
-                {/* Technologies */}
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-4">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {demoApps?.[activeDemo]?.technologies?.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+              {/* Key Features */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-3">
+                  Key Features
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {currentApp.features.map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
                 </div>
+              </div>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <Button
-                    variant="default"
-                    className={`bg-gradient-to-r ${demoApps?.[activeDemo]?.color} hover:opacity-90 text-white shadow-brand`}
-                    iconName="ExternalLink"
-                    iconPosition="right"
-                  >
-                    View Full Case Study
-                  </Button>
-                  <Button
-                    variant="outline"
-                    iconName="MessageCircle"
-                    iconPosition="left"
-                    onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-                  >
-                    Discuss Similar Project
-                  </Button>
+              {/* Tech Stack */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2.5">
+                  Technologies Used
+                </h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {currentApp.technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="px-2.5 py-1 text-xs rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-800 dark:text-gray-200 font-medium border border-gray-200/60 dark:border-white/5"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="/portfolio"
+                  className="px-6 py-3 rounded-xl bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" /> View Full Case Study
+                </a>
+
+                <button
+                  onClick={() => setIsConsultOpen(true)}
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-red-600/30 flex items-center justify-center gap-2 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" /> Discuss Similar Project
+                </button>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-secondary/5 to-accent/5 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to Build Your App?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Let's discuss your mobile app idea and create a solution that drives your business forward in the competitive Gujarat market.
-            </p>
-            <Button
-              variant="default"
-              size="lg"
-              className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 text-white shadow-brand"
-              iconName="Calendar"
-              iconPosition="left"
-              onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-            >
-              Schedule Free Consultation
-            </Button>
-          </div>
-        </div>
-      </div>
-    </section>
+      <ConsultationModal
+        isOpen={isConsultOpen}
+        onClose={() => setIsConsultOpen(false)}
+        initialService={`Mobile App - ${currentApp.subtitle}`}
+      />
+    </>
   );
 };
 

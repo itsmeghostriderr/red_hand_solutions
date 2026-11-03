@@ -1,105 +1,126 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
+import ConsultationModal from '../../../components/ConsultationModal';
 
 const ContactHero = () => {
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+
   return (
-    <section className="relative bg-gradient-to-br from-primary via-gray-900 to-secondary pt-24 pb-16 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-32 h-32 border border-white/20 rounded-full animate-pulse-slow"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 border border-accent/30 rounded-full animate-float"></div>
-        <div className="absolute bottom-20 left-1/4 w-16 h-16 border border-secondary/40 rounded-full animate-pulse-slow"></div>
-      </div>
+    <>
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Ambient Red Atmospheric Glows (Synapse & Selene style) */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-red-600/15 dark:bg-red-600/20 blur-[130px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-12 -left-20 w-80 h-80 bg-red-500/10 dark:bg-red-500/15 blur-[100px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute bottom-10 -right-20 w-80 h-80 bg-red-600/10 dark:bg-red-600/15 blur-[100px] rounded-full pointer-events-none -z-10" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
-            <Icon name="Zap" size={16} color="#E53E3E" />
-            <span className="text-white text-sm font-medium">Free Consultation Available</span>
-          </div>
-
-          {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Let's Transform Your
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              Digital Vision
-            </span>
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Ready to elevate your business with cutting-edge technology? Our expert team in Rajkot is here to guide you through every step of your digital transformation journey.
-          </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">24h</div>
-              <div className="text-gray-400 text-sm">Response Time</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">500+</div>
-              <div className="text-gray-400 text-sm">Projects Delivered</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">98%</div>
-              <div className="text-gray-400 text-sm">Client Satisfaction</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">5+</div>
-              <div className="text-gray-400 text-sm">Years Experience</div>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <Button
-              variant="default"
-              size="lg"
-              className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 text-white shadow-brand-lg px-8 py-4"
-              iconName="Calendar"
-              iconPosition="left"
-              iconSize={20}
-          onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full border border-red-500/30 bg-red-500/10 dark:bg-red-500/15 backdrop-blur-md mb-6 shadow-sm"
             >
-              Schedule Free Consultation
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white/30 text-white hover:bg-white/10 px-8 py-4"
-              iconName="Phone"
-              iconPosition="left"
-              iconSize={20}
-            >
-              Call Now: +91 6352412728
-            </Button>
-          </div>
+              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <Icon name="Zap" size={16} className="text-red-600 dark:text-red-400" />
+              <span className="text-xs sm:text-sm font-semibold tracking-wide text-red-600 dark:text-red-300">
+                Free Consultation Available
+              </span>
+            </motion.div>
 
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center space-x-8 mt-12 opacity-70">
-            <div className="flex items-center space-x-2 text-white text-sm">
-              <Icon name="Shield" size={16} />
-              <span>100% Secure</span>
+            {/* Main Heading */}
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.15]">
+              Let's Transform Your{' '}
+              <span className="bg-gradient-to-r from-red-600 via-red-500 to-rose-400 bg-clip-text text-transparent">
+                Digital Vision
+              </span>
+            </h1>
+
+            {/* Subheading */}
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+              Ready to elevate your business with cutting-edge technology? Our expert team in Rajkot is here to guide you through every step of your digital transformation journey.
+            </p>
+
+            {/* Stats Cards - Glassmorphism Bento Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
+              {[
+                { value: "24h", label: "Response Time", icon: "Clock" },
+                { value: "500+", label: "Projects Delivered", icon: "CheckCircle" },
+                { value: "98%", label: "Client Satisfaction", icon: "Smile" },
+                { value: "5+", label: "Years Experience", icon: "Award" }
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                  className="p-5 rounded-2xl bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-lg shadow-black/[0.03] dark:shadow-red-950/10 group hover:border-red-500/40 transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="text-3xl sm:text-4xl font-extrabold text-red-600 dark:text-red-500 font-heading mb-1 tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            <div className="flex items-center space-x-2 text-white text-sm">
-              <Icon name="Clock" size={16} />
-              <span>Quick Response</span>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+              <Button
+                variant="default"
+                size="lg"
+                className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold shadow-lg shadow-red-600/30 px-8 py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center space-x-2"
+                iconName="Calendar"
+                iconPosition="left"
+                iconSize={20}
+                onClick={() => setIsConsultationOpen(true)}
+              >
+                <span>Schedule Free Consultation</span>
+              </Button>
+              <a
+                href="tel:+916352412728"
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl font-semibold border border-slate-300 dark:border-white/20 bg-white/80 dark:bg-white/[0.05] text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 hover:border-red-500/50 transition-all duration-300 shadow-sm"
+              >
+                <Icon name="Phone" size={18} className="text-red-600 dark:text-red-400" />
+                <span>Call Now: +91 6352412728</span>
+              </a>
             </div>
-            <div className="flex items-center space-x-2 text-white text-sm">
-              <Icon name="Award" size={16} />
-              <span>Certified Experts</span>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mt-12 pt-8 border-t border-slate-200/80 dark:border-white/10">
+              {[
+                { icon: "Shield", text: "100% Secure" },
+                { icon: "Clock", text: "Quick Response" },
+                { icon: "Award", text: "Certified Experts" },
+                { icon: "MapPin", text: "Rajkot Based" }
+              ].map((item) => (
+                <div key={item.text} className="flex items-center space-x-2 text-slate-600 dark:text-slate-400 text-sm font-medium">
+                  <Icon name={item.icon} size={16} className="text-red-600 dark:text-red-400" />
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
-            <div className="flex items-center space-x-2 text-white text-sm">
-              <Icon name="MapPin" size={16} />
-              <span>Rajkot Based</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Consultation Booking Modal */}
+      <ConsultationModal
+        isOpen={isConsultationOpen}
+        onClose={() => setIsConsultationOpen(false)}
+        initialService="Digital Transformation"
+      />
+    </>
   );
 };
 

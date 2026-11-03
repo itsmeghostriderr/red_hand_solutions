@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Icon from '../../../components/AppIcon';
 
 const TimelineSection = () => {
-  const [activeYear, setActiveYear] = useState(2018);
+  const [activeYear, setActiveYear] = useState(2024);
 
   const timelineData = [
     {
@@ -11,7 +11,6 @@ const TimelineSection = () => {
       title: "Foundation in Rajkot",
       description: "Red Hand Solutions was founded with a vision to bridge the technology gap for Gujarat businesses. Started with a team of 3 passionate developers in a small office in Rajkot.",
       icon: "Rocket",
-      color: "red",
       achievements: [
         "Established company in Rajkot",
         "First 5 clients onboarded",
@@ -23,7 +22,6 @@ const TimelineSection = () => {
       title: "Expansion & Growth",
       description: "Expanded our service offerings to include mobile app development and cloud solutions. Team grew to 8 members with specialized expertise.",
       icon: "TrendingUp",
-      color: "blue",
       achievements: [
         "Mobile app development services launched",
         "Team expanded to 8 members",
@@ -35,7 +33,6 @@ const TimelineSection = () => {
       title: "Digital Transformation Era",
       description: "During the pandemic, we helped 50+ businesses transition to digital platforms. Introduced AI and automation services to our portfolio.",
       icon: "Cpu",
-      color: "green",
       achievements: [
         "50+ digital transformation projects",
         "AI & automation services introduced",
@@ -47,7 +44,6 @@ const TimelineSection = () => {
       title: "Technology Partnerships",
       description: "Formed strategic partnerships with AWS, Google Cloud, and Microsoft. Achieved certifications and became authorized solution providers.",
       icon: "Handshake",
-      color: "purple",
       achievements: [
         "AWS Partnership established",
         "Google Cloud certification achieved",
@@ -57,9 +53,8 @@ const TimelineSection = () => {
     {
       year: 2022,
       title: "Industry Recognition",
-      description: "Recognized as \'Best IT Solutions Provider in Gujarat\' by Gujarat IT Association. Expanded to serve clients across Western India.",
+      description: "Recognized as 'Best IT Solutions Provider in Gujarat' by Gujarat IT Association. Expanded to serve clients across Western India.",
       icon: "Award",
-      color: "yellow",
       achievements: [
         "Gujarat IT Association award",
         "100+ projects completed",
@@ -71,7 +66,6 @@ const TimelineSection = () => {
       title: "Innovation Hub",
       description: "Established R&D division focusing on emerging technologies like blockchain, IoT, and machine learning. Team reached 20+ professionals.",
       icon: "Lightbulb",
-      color: "indigo",
       achievements: [
         "R&D division established",
         "Blockchain solutions launched",
@@ -83,7 +77,6 @@ const TimelineSection = () => {
       title: "Market Leadership",
       description: "Became Gujarat's leading IT solutions provider with 200+ successful projects. Launched startup incubation program to support local entrepreneurs.",
       icon: "Crown",
-      color: "red",
       achievements: [
         "200+ projects milestone",
         "Startup incubation program",
@@ -92,23 +85,11 @@ const TimelineSection = () => {
     }
   ];
 
-  const getColorClasses = (color, isActive = false) => {
-    const colors = {
-      red: isActive ? 'bg-red-600 text-white' : 'bg-red-100 text-red-600 hover:bg-red-200',
-      blue: isActive ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600 hover:bg-blue-200',
-      green: isActive ? 'bg-green-600 text-white' : 'bg-green-100 text-green-600 hover:bg-green-200',
-      purple: isActive ? 'bg-purple-600 text-white' : 'bg-purple-100 text-purple-600 hover:bg-purple-200',
-      yellow: isActive ? 'bg-yellow-600 text-white' : 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200',
-      indigo: isActive ? 'bg-indigo-600 text-white' : 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
-    };
-    return colors?.[color] || colors?.red;
-  };
-
-  const activeData = timelineData?.find(item => item?.year === activeYear);
+  const activeData = timelineData.find(item => item.year === activeYear) || timelineData[timelineData.length - 1];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative overflow-hidden bg-gray-50/70 dark:bg-black/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -116,113 +97,108 @@ const TimelineSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Journey of
-            <span className="block text-gradient bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
-              Innovation & Growth
-            </span>
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-red-600/10 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-3">
+            <span>Historical Milestones</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-5 tracking-tight">
+            Our Journey of <span className="text-red-600 dark:text-red-500">Innovation & Growth</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             From a small startup in Rajkot to Gujarat's trusted IT partner, discover the milestones that shaped our journey and the vision that drives us forward.
           </p>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto">
-          {/* Timeline Navigation */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {timelineData?.map((item, index) => (
-              <motion.button
-                key={item?.year}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                viewport={{ once: true }}
-                onClick={() => setActiveYear(item?.year)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  getColorClasses(item?.color, activeYear === item?.year)
-                }`}
-              >
-                <Icon name={item?.icon} size={16} />
-                <span className="font-medium">{item?.year}</span>
-              </motion.button>
-            ))}
+        <div className="max-w-5xl mx-auto">
+          {/* Timeline Year Selectors Track */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {timelineData.map((item, index) => {
+              const isActive = activeYear === item.year;
+              return (
+                <button
+                  key={item.year}
+                  onClick={() => setActiveYear(item.year)}
+                  className={`flex items-center space-x-2 px-5 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all duration-300 ${
+                    isActive
+                      ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-lg shadow-red-600/30 scale-105'
+                      : 'bg-white dark:bg-white/[0.04] text-gray-700 dark:text-gray-300 border border-gray-200/80 dark:border-white/10 hover:border-red-500/40'
+                  }`}
+                >
+                  <Icon name={item.icon} size={15} />
+                  <span>{item.year}</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Active Timeline Content */}
-          <motion.div
-            key={activeYear}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-2xl shadow-brand-lg border border-gray-200 overflow-hidden"
-          >
-            <div className="grid lg:grid-cols-2 gap-0">
-              {/* Content */}
-              <div className="p-8 lg:p-12">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                    getColorClasses(activeData?.color, true)
-                  }`}>
-                    <Icon name={activeData?.icon} size={24} />
+          {/* Active Timeline Showcase Card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeYear}
+              initial={{ opacity: 0, scale: 0.98, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-2xl border border-gray-200/80 dark:border-white/10 shadow-2xl p-8 sm:p-12 text-left relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
+
+              <div className="grid lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-8 space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-red-600/30">
+                      <Icon name={activeData.icon} size={30} />
+                    </div>
+                    <div>
+                      <span className="text-4xl sm:text-5xl font-black text-red-600 dark:text-red-400 font-mono tracking-tight block">
+                        {activeData.year}
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                        {activeData.title}
+                      </h3>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-gray-900">{activeData?.year}</h3>
-                    <p className="text-lg text-gray-600">{activeData?.title}</p>
-                  </div>
-                </div>
 
-                <p className="text-gray-700 text-lg mb-8 leading-relaxed">
-                  {activeData?.description}
-                </p>
+                  <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+                    {activeData.description}
+                  </p>
 
-                <div className="space-y-4">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Achievements</h4>
-                  {activeData?.achievements?.map((achievement, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="flex items-center space-x-3"
-                    >
-                      <div className={`w-2 h-2 rounded-full ${
-                        activeData?.color === 'red' ? 'bg-red-600' :
-                        activeData?.color === 'blue' ? 'bg-blue-600' :
-                        activeData?.color === 'green' ? 'bg-green-600' :
-                        activeData?.color === 'purple' ? 'bg-purple-600' :
-                        activeData?.color === 'yellow'? 'bg-yellow-600' : 'bg-indigo-600'
-                      }`}></div>
-                      <span className="text-gray-700">{achievement}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Visual */}
-              <div className="bg-gradient-to-br from-gray-100 to-gray-200 p-8 lg:p-12 flex items-center justify-center">
-                <div className="relative">
-                  <div className={`absolute inset-0 rounded-2xl blur-xl opacity-30 ${
-                    activeData?.color === 'red' ? 'bg-red-600' :
-                    activeData?.color === 'blue' ? 'bg-blue-600' :
-                    activeData?.color === 'green' ? 'bg-green-600' :
-                    activeData?.color === 'purple' ? 'bg-purple-600' :
-                    activeData?.color === 'yellow'? 'bg-yellow-600' : 'bg-indigo-600'
-                  }`}></div>
-                  <div className="relative bg-white rounded-2xl p-8 shadow-brand">
-                    <div className="text-center">
-                      <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                        getColorClasses(activeData?.color, true)
-                      }`}>
-                        <Icon name={activeData?.icon} size={32} />
-                      </div>
-                      <h4 className="text-2xl font-bold text-gray-900 mb-2">{activeData?.year}</h4>
-                      <p className="text-gray-600 font-medium">{activeData?.title}</p>
+                  <div className="space-y-3 pt-3 border-t border-gray-100 dark:border-white/5">
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
+                      Key Achievements
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {activeData.achievements.map((achievement, i) => (
+                        <div
+                          key={i}
+                          className="p-3.5 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 flex items-start space-x-2.5"
+                        >
+                          <div className="w-4 h-4 rounded-full bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Icon name="Check" size={10} />
+                          </div>
+                          <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                            {achievement}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
+
+                {/* Right Badge Stamp */}
+                <div className="lg:col-span-4 text-center p-6 rounded-2xl bg-gradient-to-br from-red-600/10 via-rose-500/5 to-transparent border border-red-500/20">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-red-600/30">
+                    <Icon name={activeData.icon} size={36} />
+                  </div>
+                  <h4 className="text-2xl font-extrabold text-gray-900 dark:text-white font-mono">
+                    {activeData.year}
+                  </h4>
+                  <p className="text-xs font-semibold text-red-600 dark:text-red-400 mt-1 uppercase tracking-wider">
+                    {activeData.title}
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

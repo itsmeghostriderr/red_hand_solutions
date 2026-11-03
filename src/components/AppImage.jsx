@@ -13,7 +13,8 @@ function Image({
       alt={alt}
       className={className}
       onError={(e) => {
-        e.target.src = "/assets/images/no_image.png"
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = "/assets/images/RHS Logo (Edited).png";
       }}
       {...props}
     />

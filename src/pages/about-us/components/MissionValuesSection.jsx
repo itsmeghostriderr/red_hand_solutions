@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Icon from '../../../components/AppIcon';
+import ConsultationModal from '../../../components/ConsultationModal';
 
 const MissionValuesSection = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const missionData = {
     title: "Our Mission",
     description: "Empowering businesses through innovative technology solutions",
@@ -15,7 +18,6 @@ const MissionValuesSection = () => {
       title: "Innovation",
       description: "Embracing cutting-edge technologies to deliver solutions that drive business growth and competitive advantage.",
       icon: "Lightbulb",
-      color: "red",
       features: [
         "Latest technology adoption",
         "Creative problem-solving",
@@ -27,7 +29,6 @@ const MissionValuesSection = () => {
       title: "Reliability",
       description: "Building trust through consistent delivery, transparent communication, and unwavering commitment to quality.",
       icon: "Shield",
-      color: "blue",
       features: [
         "98% client satisfaction",
         "On-time project delivery",
@@ -39,7 +40,6 @@ const MissionValuesSection = () => {
       title: "Partnership",
       description: "Fostering long-term relationships based on mutual respect, collaboration, and shared success.",
       icon: "Handshake",
-      color: "green",
       features: [
         "Collaborative approach",
         "Client-centric solutions",
@@ -51,7 +51,6 @@ const MissionValuesSection = () => {
       title: "Growth",
       description: "Driving sustainable growth for our clients, our team, and the broader Gujarat tech ecosystem.",
       icon: "TrendingUp",
-      color: "purple",
       features: [
         "Scalable solutions",
         "Team development",
@@ -61,154 +60,144 @@ const MissionValuesSection = () => {
     }
   ];
 
-  const getColorClasses = (color) => {
-    const colors = {
-      red: 'from-red-500 to-red-600',
-      blue: 'from-blue-500 to-blue-600',
-      green: 'from-green-500 to-green-600',
-      purple: 'from-purple-500 to-purple-600'
-    };
-    return colors?.[color] || colors?.red;
-  };
-
-  const getBgColorClasses = (color) => {
-    const colors = {
-      red: 'bg-red-50 border-red-200',
-      blue: 'bg-blue-50 border-blue-200',
-      green: 'bg-green-50 border-green-200',
-      purple: 'bg-purple-50 border-purple-200'
-    };
-    return colors?.[color] || colors?.red;
-  };
-
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mission Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto mb-20"
-        >
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-red-600/20 to-blue-600/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-blue-600/20 to-purple-600/20 rounded-full blur-3xl"></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <Icon name={missionData?.icon} size={24} className="text-white" />
+    <>
+      <section className="py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Mission Statement Hero Block */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-5xl mx-auto mb-24"
+          >
+            <div className="rounded-3xl p-8 sm:p-12 lg:p-14 bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white border border-red-600/30 shadow-2xl relative overflow-hidden text-left">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/15 rounded-full blur-[120px] pointer-events-none" />
+
+              <div className="relative z-10 space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-red-600/40">
+                    <Icon name={missionData.icon} size={26} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-semibold uppercase tracking-widest text-red-400">Guiding Purpose</span>
+                    <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white">{missionData.title}</h2>
+                  </div>
                 </div>
-                <h2 className="text-3xl lg:text-4xl font-bold">{missionData?.title}</h2>
-              </div>
-              
-              <h3 className="text-2xl lg:text-3xl font-semibold text-gradient bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent mb-6">
-                {missionData?.description}
-              </h3>
-              
-              <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
-                {missionData?.content?.split('\n\n')?.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+
+                <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-red-400 via-rose-300 to-white bg-clip-text text-transparent">
+                  {missionData.description}
+                </h3>
+
+                <div className="space-y-4 text-gray-300 text-base sm:text-lg leading-relaxed font-normal">
+                  {missionData.content.split('\n\n').map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Values Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Core
-            <span className="block text-gradient bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
-              Values
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            These fundamental principles guide every decision we make and every solution we deliver, ensuring we stay true to our commitment to excellence.
-          </p>
-        </motion.div>
-
-        {/* Values Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {values?.map((value, index) => (
-            <motion.div
-              key={value?.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              viewport={{ once: true }}
-              className={`group relative bg-white rounded-2xl border-2 p-8 hover:shadow-brand-lg transition-all duration-300 ${getBgColorClasses(value?.color)}`}
-            >
-              <div className="text-center mb-6">
-                <div className={`w-20 h-20 bg-gradient-to-r ${getColorClasses(value?.color)} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon name={value?.icon} size={28} className="text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{value?.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value?.description}</p>
-              </div>
-
-              <div className="space-y-3">
-                {value?.features?.map((feature, featureIndex) => (
-                  <motion.div
-                    key={featureIndex}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: (index * 0.1) + (featureIndex * 0.05), duration: 0.5 }}
-                    viewport={{ once: true }}
-                    className="flex items-center space-x-3"
-                  >
-                    <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${getColorClasses(value?.color)}`}></div>
-                    <span className="text-gray-700 text-sm">{feature}</span>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Hover Effect */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${getColorClasses(value?.color)} rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-red-50 to-blue-50 rounded-2xl p-8 lg:p-12 border border-gray-200">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Ready to Experience Our Values in Action?
-            </h3>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Let's discuss how our mission-driven approach can transform your business with innovative technology solutions.
+          {/* Values Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-red-600/10 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-3">
+              <span>Uncompromising Standards</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-5 tracking-tight">
+              Our Core <span className="text-red-600 dark:text-red-500">Values</span>
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              These fundamental principles guide every decision we make and every solution we deliver, ensuring we stay true to our commitment to excellence.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-2 justify-center"
-                onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
+          </motion.div>
+
+          {/* Values Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => (
+              <motion.div
+                key={value.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="group relative rounded-3xl p-7 bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-2xl hover:shadow-red-600/15 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2 text-left"
               >
-                <Icon name="Calendar" size={20} />
-                <span>Schedule Consultation</span>
-              </button>
-              <button className="bg-white border-2 border-gray-300 hover:border-blue-600 text-gray-900 hover:text-blue-600 px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-2 justify-center">
-                <Icon name="Download" size={20} />
-                <span>Download Company Profile</span>
-              </button>
-            </div>
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center mb-6 shadow-md shadow-red-600/30 group-hover:scale-110 transition-transform duration-300">
+                    <Icon name={value.icon} size={28} />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2.5 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                    {value.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                    {value.description}
+                  </p>
+
+                  <div className="space-y-2.5 pt-4 border-t border-gray-100 dark:border-white/5">
+                    {value.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center space-x-2.5 text-xs text-gray-700 dark:text-gray-300 font-medium">
+                        <div className="w-2 h-2 rounded-full bg-red-600 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-      </div>
-    </section>
+
+          {/* Call to Action */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mt-20"
+          >
+            <div className="rounded-3xl p-8 sm:p-12 bg-white dark:bg-white/[0.04] backdrop-blur-2xl border border-gray-200/80 dark:border-white/10 shadow-2xl max-w-4xl mx-auto">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
+                Ready to Experience Our Values in Action?
+              </h3>
+              <p className="text-base text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Let's discuss how our mission-driven approach can transform your business with innovative technology solutions.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-8 py-3.5 rounded-full font-bold text-base shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto"
+                >
+                  <Icon name="Calendar" size={18} />
+                  <span>Schedule Consultation</span>
+                </button>
+                <button
+                  onClick={() => {
+                    alert("Downloading Red Hand Solutions Company Profile PDF...");
+                  }}
+                  className="border-2 border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 px-8 py-3.5 rounded-full font-bold text-base transition-colors flex items-center justify-center space-x-2 w-full sm:w-auto"
+                >
+                  <Icon name="Download" size={18} />
+                  <span>Download Company Profile</span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Free Consultation Modal */}
+      <ConsultationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 };
 

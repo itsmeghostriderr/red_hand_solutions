@@ -1,10 +1,33 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
+import { motion } from 'framer-motion';
+import { 
+  Download, 
+  Star, 
+  Users, 
+  TrendingUp, 
+  Award, 
+  CheckCircle2, 
+  Search, 
+  Image as ImageIcon, 
+  MessageSquare, 
+  BarChart3, 
+  Calendar,
+  ExternalLink,
+  Sparkles
+} from 'lucide-react';
 import Image from '../../../components/AppImage';
-import Button from '../../../components/ui/Button';
+import ConsultationModal from '../../../components/ConsultationModal';
+
+const iconMap = {
+  Download,
+  Star,
+  Users,
+  TrendingUp
+};
 
 const AppStoreSuccessSection = () => {
   const [activeMetric, setActiveMetric] = useState(0);
+  const [isConsultOpen, setIsConsultOpen] = useState(false);
 
   const successMetrics = [
     {
@@ -13,7 +36,6 @@ const AppStoreSuccessSection = () => {
       value: '2.5M+',
       description: 'Combined downloads across all our client apps',
       icon: 'Download',
-      color: 'from-blue-600 to-purple-600',
       details: [
         'iOS App Store: 1.2M downloads',
         'Google Play Store: 1.3M downloads',
@@ -27,7 +49,6 @@ const AppStoreSuccessSection = () => {
       value: '4.7★',
       description: 'Consistent high ratings across app stores',
       icon: 'Star',
-      color: 'from-yellow-500 to-orange-500',
       details: [
         'iOS App Store average: 4.8★',
         'Google Play Store average: 4.6★',
@@ -41,7 +62,6 @@ const AppStoreSuccessSection = () => {
       value: '78%',
       description: '30-day user retention rate',
       icon: 'Users',
-      color: 'from-green-600 to-teal-600',
       details: [
         'Day 1 retention: 85%',
         'Day 7 retention: 82%',
@@ -55,7 +75,6 @@ const AppStoreSuccessSection = () => {
       value: '₹15Cr+',
       description: 'Total revenue generated for clients',
       icon: 'TrendingUp',
-      color: 'from-emerald-600 to-green-600',
       details: [
         'E-commerce apps: ₹8.5Cr',
         'Service apps: ₹4.2Cr',
@@ -117,316 +136,289 @@ const AppStoreSuccessSection = () => {
     {
       title: 'Keyword Optimization',
       description: 'Strategic keyword research and implementation for better discoverability',
-      icon: 'Search',
+      icon: Search,
       results: '+150% organic visibility'
     },
     {
       title: 'Visual Assets',
       description: 'Compelling screenshots, videos, and app icons that drive conversions',
-      icon: 'Image',
+      icon: ImageIcon,
       results: '+85% conversion rate'
     },
     {
       title: 'Review Management',
       description: 'Proactive review monitoring and response strategy',
-      icon: 'MessageSquare',
+      icon: MessageSquare,
       results: '+0.8 rating improvement'
     },
     {
       title: 'A/B Testing',
       description: 'Continuous testing of store listings for optimal performance',
-      icon: 'BarChart3',
+      icon: BarChart3,
       results: '+65% download rate'
     }
   ];
 
+  const handleDownloadSuccessGuide = () => {
+    const text = [
+      'RED HAND SOLUTIONS - APP STORE SUCCESS GUIDE',
+      '============================================\n',
+      'METRICS SUMMARY:',
+      ' - Total Downloads: 2.5M+ (iOS: 1.2M, Play Store: 1.3M)',
+      ' - Average Store Rating: 4.7/5.0 Stars',
+      ' - 30-Day Retention Rate: 78%',
+      ' - Client Revenue Generated: ₹15Cr+\n',
+      'APPROVAL RECORD:',
+      ' - First-Time Store Approval Rate: 98.5%',
+      ' - Average Turnaround: 2-3 Days\n',
+      'PROVEN ASO STRATEGIES:',
+      ...asoStrategies.map(s => ` - ${s.title}: ${s.description} (Result: ${s.results})`),
+      '\nContact: +91 6352412728 | redhand.solution@gmail.com | Rajkot, Gujarat'
+    ].join('\n');
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Red-Hand-Solutions-App-Store-Guide.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Icon name="Award" size={16} />
-            <span>App Store Success</span>
+    <>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Award className="w-4 h-4" /> Store Optimization Authority
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Proven Track Record of
-            <span className="block text-gradient bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-              App Store Success
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            Proven Track Record of <br />
+            <span className="text-red-600 dark:text-red-500">App Store Success</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             Our apps consistently achieve high ratings, strong user retention, and significant revenue generation across both iOS App Store and Google Play Store.
           </p>
         </div>
 
-        {/* Success Metrics */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {successMetrics?.map((metric, index) => (
-            <div
-              key={metric?.id}
-              className={`cursor-pointer transition-all duration-300 ${
-                activeMetric === index ? 'transform -translate-y-2' : 'hover:transform hover:-translate-y-1'
-              }`}
-              onClick={() => setActiveMetric(index)}
-            >
-              <div className={`p-8 bg-white rounded-2xl shadow-brand hover:shadow-brand-lg transition-all duration-300 border-2 ${
-                activeMetric === index ? 'border-secondary' : 'border-transparent'
-              }`}>
-                <div className={`w-16 h-16 bg-gradient-to-br ${metric?.color} rounded-2xl flex items-center justify-center mb-6`}>
-                  <Icon name={metric?.icon} size={28} color="white" />
-                </div>
-                <div className="text-4xl font-bold text-gray-900 mb-2">{metric?.value}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{metric?.title}</h3>
-                <p className="text-gray-600">{metric?.description}</p>
-                
-                {activeMetric === index && (
-                  <div className="mt-6 pt-6 border-t border-gray-100">
-                    <div className="space-y-2">
-                      {metric?.details?.map((detail, detailIndex) => (
-                        <div key={detailIndex} className="flex items-center space-x-2 text-sm text-gray-600">
-                          <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0"></div>
-                          <span>{detail}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* 4 Interactive Success Metric Cards */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 text-left">
+          {successMetrics.map((metric, idx) => {
+            const IconComp = iconMap[metric.icon] || Award;
+            const isSelected = activeMetric === idx;
 
-        {/* Featured Apps */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Featured Success Stories</h3>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore some of our most successful apps that have achieved remarkable performance in app stores
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {featuredApps?.map((app, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-brand hover:shadow-brand-lg transition-all duration-300 overflow-hidden group">
-                {/* App Image */}
-                <div className="relative overflow-hidden">
-                  <Image
-                    src={app?.image}
-                    alt={`${app?.name} app screenshot`}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-gray-900">
-                    {app?.category}
+            return (
+              <div
+                key={metric.id}
+                onClick={() => setActiveMetric(idx)}
+                className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 glass-card border flex flex-col justify-between ${
+                  isSelected
+                    ? 'border-red-500 ring-2 ring-red-500/30 shadow-xl'
+                    : 'border-gray-200/80 dark:border-white/10 hover:border-red-500/40'
+                }`}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mb-4 border border-red-500/20">
+                    <IconComp className="w-6 h-6" />
                   </div>
+                  <div className="text-3xl font-black text-gray-900 dark:text-white mb-1">
+                    {metric.value}
+                  </div>
+                  <h3 className="font-bold text-sm text-gray-900 dark:text-white mb-1">
+                    {metric.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    {metric.description}
+                  </p>
                 </div>
 
-                {/* App Details */}
-                <div className="p-6">
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">{app?.name}</h4>
-                  <p className="text-gray-600 mb-4">{app?.description}</p>
-
-                  {/* App Metrics */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-secondary">{app?.downloads}</div>
-                      <div className="text-xs text-gray-500">Downloads</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-secondary">{app?.rating}</div>
-                      <div className="text-xs text-gray-500">Rating</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-secondary">{app?.revenue}</div>
-                      <div className="text-xs text-gray-500">Revenue</div>
-                    </div>
-                  </div>
-
-                  {/* Key Features */}
-                  <div className="mb-6">
-                    <h5 className="text-sm font-semibold text-gray-900 mb-2">Key Features</h5>
-                    <div className="flex flex-wrap gap-2">
-                      {app?.features?.map((feature, featureIndex) => (
-                        <span
-                          key={featureIndex}
-                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Achievements */}
-                  <div className="mb-6">
-                    <h5 className="text-sm font-semibold text-gray-900 mb-2">Achievements</h5>
-                    <div className="space-y-1">
-                      {app?.achievements?.map((achievement, achievementIndex) => (
-                        <div key={achievementIndex} className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Icon name="Award" size={12} className="text-secondary flex-shrink-0" />
-                          <span>{achievement}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    fullWidth
-                    iconName="ExternalLink"
-                    iconPosition="right"
-                  >
-                    View Case Study
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ASO Strategies */}
-        <div className="bg-gradient-to-r from-gray-900 to-black rounded-3xl p-8 lg:p-12 text-white mb-16">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Our App Store Optimization Strategy</h3>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              We don't just build apps – we ensure they succeed in the competitive app store environment with proven ASO techniques
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {asoStrategies?.map((strategy, index) => (
-              <div key={index} className="text-center group">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-all duration-300">
-                  <Icon name={strategy?.icon} size={32} />
-                </div>
-                <h4 className="text-xl font-bold mb-3">{strategy?.title}</h4>
-                <p className="opacity-80 mb-4">{strategy?.description}</p>
-                <div className="inline-flex items-center space-x-2 bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">
-                  <Icon name="TrendingUp" size={14} />
-                  <span>{strategy?.results}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* App Store Guidelines */}
-        <div className="bg-white rounded-3xl shadow-brand-lg p-8 lg:p-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                App Store Compliance & Guidelines
-              </h3>
-              <p className="text-lg text-gray-600 mb-8">
-                We ensure your app meets all app store guidelines and requirements for smooth approval and ongoing compliance.
-              </p>
-
-              <div className="space-y-6">
-                {[
-                  {
-                    title: 'iOS App Store Guidelines',
-                    items: ['Human Interface Guidelines', 'App Review Guidelines', 'Privacy Requirements', 'Performance Standards']
-                  },
-                  {
-                    title: 'Google Play Store Policies',
-                    items: ['Content Policy', 'Developer Policy', 'Families Policy', 'Payments Policy']
-                  }
-                ]?.map((guideline, index) => (
-                  <div key={index}>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-3">{guideline?.title}</h4>
-                    <div className="grid sm:grid-cols-2 gap-2">
-                      {guideline?.items?.map((item, itemIndex) => (
-                        <div key={itemIndex} className="flex items-center space-x-2">
-                          <Icon name="CheckCircle" size={16} className="text-green-600 flex-shrink-0" />
-                          <span className="text-gray-600 text-sm">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              {/* Submission Process */}
-              <div className="bg-gradient-to-br from-secondary/5 to-accent/5 rounded-2xl p-6">
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Our Submission Process</h4>
-                <div className="space-y-4">
-                  {[
-                    'Pre-submission app review and testing',
-                    'App store metadata optimization',
-                    'Screenshot and video creation',
-                    'Submission and review monitoring',
-                    'Post-approval support and updates'
-                  ]?.map((step, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-secondary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
-                        {index + 1}
-                      </div>
-                      <span className="text-gray-700">{step}</span>
+                <div className="pt-3 border-t border-gray-100 dark:border-white/5 space-y-1">
+                  {metric.details.slice(0, 2).map((det, i) => (
+                    <div key={i} className="flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400">
+                      <div className="w-1 h-1 rounded-full bg-red-500" />
+                      <span className="truncate">{det}</span>
                     </div>
                   ))}
                 </div>
               </div>
+            );
+          })}
+        </div>
 
-              {/* Success Rate */}
-              <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl">
-                <div className="text-4xl font-bold text-green-600 mb-2">98.5%</div>
-                <div className="text-lg font-semibold text-gray-900 mb-1">First-Time Approval Rate</div>
-                <div className="text-sm text-gray-600">Average approval time: 2-3 days</div>
+        {/* Featured Apps Showcase */}
+        <div className="mb-16 text-left">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+              Featured Success Stories
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+              Apps engineered by Red Hand Solutions driving millions of user transactions
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {featuredApps.map((app, index) => (
+              <div
+                key={index}
+                className="rounded-2xl glass-card border border-gray-200/80 dark:border-white/10 overflow-hidden flex flex-col justify-between hover:border-red-500/40 transition-colors"
+              >
+                <div>
+                  <div className="relative h-44 overflow-hidden bg-gray-900">
+                    <Image
+                      src={app.image}
+                      alt={app.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/90 text-gray-900 backdrop-blur-md">
+                      {app.category}
+                    </span>
+                    <h4 className="absolute bottom-3 left-4 text-white font-bold text-base">
+                      {app.name}
+                    </h4>
+                  </div>
+
+                  <div className="p-6 space-y-4">
+                    <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {app.description}
+                    </p>
+
+                    <div className="grid grid-cols-3 gap-2 text-center p-3 rounded-xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
+                      <div>
+                        <div className="text-sm font-bold text-red-600 dark:text-red-400">{app.downloads}</div>
+                        <div className="text-[10px] text-gray-400">Downloads</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-amber-500">{app.rating}</div>
+                        <div className="text-[10px] text-gray-400">Rating</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{app.revenue}</div>
+                        <div className="text-[10px] text-gray-400">Gross Rev</div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {app.achievements.map((ach, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                          <span>{ach}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="px-6 pb-6 pt-2">
+                  <a
+                    href="/portfolio"
+                    className="w-full py-2.5 rounded-xl bg-gray-100 dark:bg-white/[0.06] hover:bg-gray-200 dark:hover:bg-white/[0.12] text-gray-800 dark:text-gray-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-red-500" /> View Case Study
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ASO Strategy Pillars */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 mb-16 shadow-2xl text-center">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+            Our App Store Optimization Strategy
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-10">
+            We don't just build apps – we ensure they succeed in the competitive app store environment with proven ASO techniques
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {asoStrategies.map((item, idx) => {
+              const ItemIcon = item.icon;
+              return (
+                <div key={idx} className="p-6 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/5 flex flex-col items-center justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-3">
+                      <ItemIcon className="w-6 h-6" />
+                    </div>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-1.5">
+                      {item.title}
+                    </h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                      {item.description}
+                    </p>
+                  </div>
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    {item.results}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Compliance and 98.5% Rate */}
+        <div className="rounded-3xl glass-card border border-gray-200 dark:border-white/10 p-8 sm:p-12 mb-14 text-left">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-8 space-y-4">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                App Store Compliance & Guidelines
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                We ensure your app meets all strict App Store and Google Play requirements for smooth approval and ongoing policy compliance, avoiding store rejections or policy warnings.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-2.5 pt-2">
+                <span className="text-xs text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Human Interface Guidelines compliant
+                </span>
+                <span className="text-xs text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> App Privacy & Tracking transparency
+                </span>
+                <span className="text-xs text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Google Play Developer Policy adherence
+                </span>
+                <span className="text-xs text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Indian regulatory & payment standards
+                </span>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* CTA Section */}
-        {/* Discuss Custom Solution Button */}
-        <div className="text-center mt-8">
-          <Button
-            variant="default"
-            size="lg"
-            className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 shadow-brand-lg mb-4"
-            iconName="MessageCircle"
-            iconPosition="left"
-            onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-          >
-            Discuss Custom Solution
-          </Button>
-        </div>
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-secondary to-accent rounded-3xl p-12 text-white">
-            <h3 className="text-3xl font-bold mb-4">
-              Ready to Launch Your Successful App?
-            </h3>
-            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              Let's create an app that not only meets your business goals but also achieves outstanding performance in app stores.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                variant="secondary"
-                size="lg"
-                className="bg-white text-secondary hover:bg-gray-100"
-                iconName="Calendar"
-                iconPosition="left"
-                onClick={() => window.open('https://calendly.com/redhand-solution/30min', '_blank')}
-              >
-                Schedule App Strategy Session
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white text-white hover:bg-white/10"
-                iconName="Download"
-                iconPosition="left"
-              >
-                Download Success Guide
-              </Button>
+            <div className="lg:col-span-4 p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-1">
+              <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400">
+                98.5%
+              </div>
+              <h4 className="font-bold text-sm text-gray-900 dark:text-white">
+                First-Time Approval Rate
+              </h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Average approval turnaround: 2-3 business days
+              </p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+
+        {/* Action Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={() => setIsConsultOpen(true)}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition-all"
+          >
+            <Calendar className="w-4 h-4" /> Schedule App Strategy Session
+          </button>
+          <button
+            onClick={handleDownloadSuccessGuide}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-white/[0.06] hover:bg-gray-100 dark:hover:bg-white/[0.12] text-gray-800 dark:text-gray-200 font-bold text-xs uppercase tracking-wider border border-gray-200 dark:border-white/10 flex items-center justify-center gap-2 transition-all"
+          >
+            <Download className="w-4 h-4 text-red-500" /> Download Success Guide (.txt)
+          </button>
+        </div>
+      </section>
+
+      <ConsultationModal
+        isOpen={isConsultOpen}
+        onClose={() => setIsConsultOpen(false)}
+        initialService="App Store Success & Optimization"
+      />
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 
@@ -20,7 +20,7 @@ const TeamSection = () => {
         "Founded Red Hand Solutions in 2018",
         "Led 200+ successful project deliveries",
         "Established partnerships with AWS, Google Cloud, Microsoft",
-        "Recognized as \'IT Entrepreneur of the Year\' by Gujarat IT Association"
+        "Recognized as 'IT Entrepreneur of the Year' by Gujarat IT Association"
       ],
       contact: {
         email: "prayag.rhs@gmail.com",
@@ -80,11 +80,11 @@ const TeamSection = () => {
         "Designed interfaces for 80+ applications",
         "Improved user engagement by 45% on average",
         "Established design system used across all projects",
-        "Won \'Best UI/UX Design\' at Gujarat Design Awards 2023"
+        "Won 'Best UI/UX Design' at Gujarat Design Awards 2023"
       ],
       contact: {
         email: "sneha@redhandsolutions.com",
-        linkedin: "linkedin.com/in/snehamehta-rhs"
+        linkedin: "https://linkedin.com/in/snehamehta-rhs"
       }
     },
     {
@@ -104,7 +104,7 @@ const TeamSection = () => {
       ],
       contact: {
         email: "kiran@redhandsolutions.com",
-        linkedin: "linkedin.com/in/kiranpatel-rhs"
+        linkedin: "https://linkedin.com/in/kiranpatel-rhs"
       }
     },
     {
@@ -124,18 +124,14 @@ const TeamSection = () => {
       ],
       contact: {
         email: "ravi@redhandsolutions.com",
-        linkedin: "linkedin.com/in/ravikumar-rhs"
+        linkedin: "https://linkedin.com/in/ravikumar-rhs"
       }
     }
   ];
 
-  const closeModal = () => {
-    setSelectedMember(null);
-  };
-
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative overflow-hidden bg-gray-50/70 dark:bg-black/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -143,65 +139,67 @@ const TeamSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Meet Our
-            <span className="block text-gradient bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
-              Expert Team
-            </span>
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-red-600/10 text-red-600 dark:text-red-400 text-xs font-semibold uppercase tracking-wider mb-3">
+            <span>Leadership & Engineering</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-5 tracking-tight">
+            Meet Our <span className="text-red-600 dark:text-red-500">Expert Team</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Our diverse team of technology experts, designers, and strategists brings together decades of experience to deliver exceptional results for our clients.
           </p>
         </motion.div>
 
         {/* Team Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {teamMembers?.map((member, index) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7 mb-20">
+          {teamMembers.map((member, index) => (
             <motion.div
-              key={member?.id}
+              key={member.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true }}
-              className="group bg-white rounded-2xl shadow-brand border border-gray-200 overflow-hidden hover:shadow-brand-lg transition-all duration-300 cursor-pointer"
               onClick={() => setSelectedMember(member)}
+              className="group relative rounded-3xl overflow-hidden bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-2xl hover:shadow-red-600/15 transition-all duration-300 hover:-translate-y-2 cursor-pointer text-left"
             >
-              <div className="relative overflow-hidden">
+              <div className="relative h-64 overflow-hidden bg-gray-100 dark:bg-white/5">
                 <Image
-                  src={member?.image}
-                  alt={member?.name}
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  src={member.image}
+                  alt={member.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="w-full bg-white/90 backdrop-blur-sm text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-white transition-colors duration-200">
-                    View Full Profile
-                  </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-5 right-5 flex justify-between items-end text-white">
+                  <div>
+                    <h3 className="text-xl font-bold">{member.name}</h3>
+                    <p className="text-xs text-red-400 font-semibold">{member.position}</p>
+                  </div>
+                  <span className="text-[11px] bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-md">
+                    {member.experience}
+                  </span>
                 </div>
               </div>
 
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{member?.name}</h3>
-                <p className="text-red-600 font-medium mb-2">{member?.position}</p>
-                <p className="text-gray-600 text-sm mb-4">{member?.experience}</p>
+              <div className="p-6 space-y-4">
+                <div className="flex flex-wrap gap-1.5">
+                  {member.specializations.slice(0, 3).map((spec, sIdx) => (
+                    <span
+                      key={sIdx}
+                      className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200/40 dark:border-red-500/20"
+                    >
+                      {spec}
+                    </span>
+                  ))}
+                  {member.specializations.length > 3 && (
+                    <span className="px-2 py-1 rounded-lg text-[11px] font-medium text-gray-500 dark:text-gray-400">
+                      +{member.specializations.length - 3}
+                    </span>
+                  )}
+                </div>
 
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-900">Specializations:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {member?.specializations?.slice(0, 3)?.map((spec, specIndex) => (
-                      <span
-                        key={specIndex}
-                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs"
-                      >
-                        {spec}
-                      </span>
-                    ))}
-                    {member?.specializations?.length > 3 && (
-                      <span className="bg-red-100 text-red-600 px-2 py-1 rounded-md text-xs">
-                        +{member?.specializations?.length - 3} more
-                      </span>
-                    )}
-                  </div>
+                <div className="pt-2 flex items-center justify-between text-xs text-red-600 dark:text-red-400 font-bold group-hover:translate-x-1 transition-transform">
+                  <span>View Full Profile & Bio</span>
+                  <Icon name="ArrowRight" size={14} />
                 </div>
               </div>
             </motion.div>
@@ -209,156 +207,149 @@ const TeamSection = () => {
         </div>
 
         {/* Team Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 lg:p-12 text-white"
-        >
-          <div className="text-center mb-8">
-            <h3 className="text-3xl font-bold mb-4">Our Team by Numbers</h3>
-            <p className="text-gray-300 text-lg">The expertise and experience that drives our success</p>
+        <div className="rounded-3xl p-8 sm:p-12 bg-white dark:bg-white/[0.04] backdrop-blur-2xl border border-gray-200/80 dark:border-white/10 shadow-2xl">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+              Our Team by Numbers
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              The expertise and experience that drives our success
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Users" size={24} />
-              </div>
-              <h4 className="text-3xl font-bold mb-2">25+</h4>
-              <p className="text-gray-300">Team Members</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+            <div className="p-4 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
+              <span className="text-3xl sm:text-4xl font-black text-red-600 dark:text-red-500 font-mono block">25+</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mt-1 block">Team Members</span>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Award" size={24} />
-              </div>
-              <h4 className="text-3xl font-bold mb-2">50+</h4>
-              <p className="text-gray-300">Certifications</p>
+            <div className="p-4 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
+              <span className="text-3xl sm:text-4xl font-black text-rose-600 dark:text-rose-500 font-mono block">50+</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mt-1 block">Certifications</span>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Clock" size={24} />
-              </div>
-              <h4 className="text-3xl font-bold mb-2">150+</h4>
-              <p className="text-gray-300">Years Combined Experience</p>
+            <div className="p-4 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
+              <span className="text-3xl sm:text-4xl font-black text-red-700 dark:text-red-400 font-mono block">150+</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mt-1 block">Years Combined Experience</span>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Star" size={24} />
-              </div>
-              <h4 className="text-3xl font-bold mb-2">98%</h4>
-              <p className="text-gray-300">Client Satisfaction</p>
+            <div className="p-4 rounded-2xl bg-gray-50/80 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
+              <span className="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 font-mono block">98%</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mt-1 block">Client Satisfaction</span>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-      {/* Team Member Modal */}
-      {selectedMember && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-          >
-            <div className="relative">
+
+      {/* Team Member Profile Modal */}
+      <AnimatePresence>
+        {selectedMember && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+              onClick={() => setSelectedMember(null)}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-3xl bg-white dark:bg-[#0D0F18] border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 my-8 text-left"
+            >
               <button
-                onClick={closeModal}
-                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors duration-200"
+                onClick={() => setSelectedMember(null)}
+                className="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                aria-label="Close"
               >
                 <Icon name="X" size={20} />
               </button>
 
-              <div className="grid lg:grid-cols-2 gap-0">
-                <div className="relative">
+              <div className="grid md:grid-cols-12">
+                <div className="md:col-span-5 relative h-72 md:h-auto bg-gray-900">
                   <Image
-                    src={selectedMember?.image}
-                    alt={selectedMember?.name}
-                    className="w-full h-96 lg:h-full object-cover"
+                    src={selectedMember.image}
+                    alt={selectedMember.name}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                  <div className="absolute bottom-6 left-6 text-white">
-                    <h3 className="text-3xl font-bold mb-2">{selectedMember?.name}</h3>
-                    <p className="text-xl text-red-300">{selectedMember?.position}</p>
-                    <p className="text-gray-300">{selectedMember?.experience}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                    <h3 className="text-2xl font-bold">{selectedMember.name}</h3>
+                    <p className="text-red-400 font-semibold text-sm">{selectedMember.position}</p>
+                    <p className="text-xs text-gray-300 mt-1 font-mono">{selectedMember.experience} in Tech</p>
                   </div>
                 </div>
 
-                <div className="p-8">
-                  <div className="mb-6">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">About</h4>
-                    <div className="text-gray-700 leading-relaxed space-y-3">
-                      {selectedMember?.bio?.split('\n\n')?.map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
+                <div className="md:col-span-7 p-6 sm:p-8 space-y-5 max-h-[80vh] overflow-y-auto">
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-red-600 dark:text-red-400 mb-2">About</h4>
+                    <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed space-y-2">
+                      {selectedMember.bio.split('\n\n').map((para, pIdx) => (
+                        <p key={pIdx}>{para}</p>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">Specializations</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedMember?.specializations?.map((spec, index) => (
-                        <span
-                          key={index}
-                          className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium"
-                        >
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-red-600 dark:text-red-400 mb-2">Specializations</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedMember.specializations.map((spec, sIdx) => (
+                        <span key={sIdx} className="text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-800 dark:text-gray-200">
                           {spec}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">Certifications</h4>
-                    <ul className="space-y-2">
-                      {selectedMember?.certifications?.map((cert, index) => (
-                        <li key={index} className="flex items-center space-x-2">
-                          <Icon name="CheckCircle" size={16} className="text-green-600" />
-                          <span className="text-gray-700">{cert}</span>
-                        </li>
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-red-600 dark:text-red-400 mb-2">Certifications</h4>
+                    <div className="space-y-1.5">
+                      {selectedMember.certifications.map((cert, cIdx) => (
+                        <div key={cIdx} className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300 font-medium">
+                          <Icon name="CheckCircle" size={14} className="text-emerald-500" />
+                          <span>{cert}</span>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
 
-                  <div className="mb-6">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">Key Achievements</h4>
-                    <ul className="space-y-2">
-                      {selectedMember?.achievements?.map((achievement, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <Icon name="Star" size={16} className="text-yellow-500 mt-1 flex-shrink-0" />
-                          <span className="text-gray-700">{achievement}</span>
-                        </li>
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-red-600 dark:text-red-400 mb-2">Key Achievements</h4>
+                    <div className="space-y-1.5">
+                      {selectedMember.achievements.map((ach, aIdx) => (
+                        <div key={aIdx} className="flex items-start space-x-2 text-xs text-gray-700 dark:text-gray-300">
+                          <Icon name="Star" size={14} className="text-amber-400 mt-0.5 flex-shrink-0" />
+                          <span>{ach}</span>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
 
-                  <div className="flex space-x-4">
-                    <button
-                      className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                      onClick={() => window.open(`mailto:${selectedMember?.contact?.email}`)}
+                  <div className="flex space-x-3 pt-3 border-t border-gray-100 dark:border-white/5">
+                    <a
+                      href={`mailto:${selectedMember.contact.email}`}
+                      className="px-4 py-2 rounded-xl bg-red-600 text-white font-semibold text-xs hover:bg-red-700 transition-colors flex items-center space-x-2"
                     >
-                      <Icon name="Mail" size={16} />
-                      <span>Contact</span>
-                    </button>
-                    <button
-                      className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                      onClick={() => {
-                        let url = selectedMember?.contact?.linkedin;
-                        if (url && !url.startsWith('http')) url = 'https://' + url;
-                        window.open(url, '_blank');
-                      }}
-                    >
-                      <Icon name="Linkedin" size={16} />
-                      <span>LinkedIn</span>
-                    </button>
+                      <Icon name="Mail" size={14} />
+                      <span>Email</span>
+                    </a>
+                    {selectedMember.contact.linkedin && (
+                      <a
+                        href={selectedMember.contact.linkedin.startsWith('http') ? selectedMember.contact.linkedin : `https://${selectedMember.contact.linkedin}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-4 py-2 rounded-xl border border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-200 font-semibold text-xs hover:bg-gray-100 dark:hover:bg-white/10 transition-colors flex items-center space-x-2"
+                      >
+                        <Icon name="Linkedin" size={14} />
+                        <span>LinkedIn</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
